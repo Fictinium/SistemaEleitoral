@@ -9,13 +9,9 @@ package SECode;
  *
  * @author Utilizador
  */
-public class SistemaEleitoral {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
+public class Testes {
+    
+    public static void main(String args[]){
         
     }
-    
 }
