@@ -15,16 +15,24 @@ public class Eleitor {
     
     private int ID;
     private String nome;
+    private String email;
+    private String password;
     private ArrayList<Candidato> votacoes;
     
-    Eleitor(String nome){
+    Eleitor(String nome, String email, String password){
         this.ID = (int)(Math.random()*100000000);
         this.nome = nome;
+        this.email = email;
+        this.password = password;
         this.votacoes = new ArrayList<Candidato>();
     }
     
     public String getNome(){
         return this.nome;
+    }
+    
+    public void setPassword(String password){
+        this.password = password;
     }
     
     public ArrayList<Candidato> getListaVotacoes(){
