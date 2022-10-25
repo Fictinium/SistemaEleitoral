@@ -5,6 +5,7 @@
  */
 package SECode;
 
+import java.security.Key;
 import java.util.ArrayList;
 
 /**
@@ -17,6 +18,7 @@ public class Eleitor {
     private String nome;
     private String email;
     private String password;
+    private Key privateKey;
     private ArrayList<Candidato> votacoes;
     
     public Eleitor(String nome, String email, String password){
@@ -31,8 +33,24 @@ public class Eleitor {
         return this.nome;
     }
     
+    protected String getEmail(){
+        return this.email;
+    }
+    
+    protected String getPassword(){
+        return this.password;
+    }
+    
     public void setPassword(String password){
         this.password = password;
+    }
+    
+    protected Key getPrivateKey(){
+        return privateKey;
+    }
+    
+    protected void setPrivateKey(Key key){
+        this.privateKey = key;
     }
     
     public ArrayList<Candidato> getListaVotacoes(){
