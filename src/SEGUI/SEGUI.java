@@ -24,6 +24,17 @@ public class SEGUI extends javax.swing.JFrame {
         initComponents();       
     }
     
+    ArrayList<Eleicao> list = new ArrayList<>();
+    
+    public void addListaEleicoes(){
+        Eleicao teste1 = new Eleicao("Teste1", null, null);
+        Eleicao teste2 = new Eleicao("Teste2", null, null);
+        
+
+        list.add(teste1);
+        list.add(teste2);
+    }
+    
     
     /*private Eleicao eleicao;
     public ArrayList<> getList(){

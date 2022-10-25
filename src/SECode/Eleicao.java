@@ -21,37 +21,13 @@ public class Eleicao {
     private ArrayList<Candidato> candidatos;
     private ArrayList<Eleitor> eleitores;
     
-    Eleicao(String nome, Date dataInicio, Date dataFim){
+    public Eleicao(String nome, Date dataInicio, Date dataFim){
         this.nome = nome;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
         this.candidatos = new ArrayList<Candidato>();
         this.eleitores = new ArrayList<Eleitor>();
     }
-    
-    
-    ArrayList<Eleicao> list = new ArrayList<>();
-    
-    public void addListaEleicoes(){
-        Eleicao teste1 = new Eleicao("Teste1", null, null);
-        Eleicao teste2 = new Eleicao("Teste2", null, null);
-
-        list.add(teste1);
-        list.add(teste2);
-    }
-    
-    public void setList(ArrayList list) {
-        this.list = list;
-    }
-    
-     public ArrayList<Eleicao> getList() {
-        return list;
-    }
-   
-       
-       
-       
-       
     
     public String getNome(){
         return this.nome;
