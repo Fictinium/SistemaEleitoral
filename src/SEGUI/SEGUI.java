@@ -9,6 +9,8 @@ import SECode.Eleicao;
 import SECode.Eleitor;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 
 
 /**
@@ -21,33 +23,34 @@ public class SEGUI extends javax.swing.JFrame {
      * Creates new form SEGUI
      */
     public SEGUI() {
-        initComponents();       
+        initComponents();
+        addLista();
     }
     
-    ArrayList<Eleicao> list = new ArrayList<>();
     
-    public void addListaEleicoes(){
+    //Array de Eleições
+    ArrayList<Eleicao> listaEleicao = new ArrayList<>();
+    
+    //TESTE: Adiciona dois elementos às ao ArrayList<Eleicao>
+    public void addToArraylistaEleicoes(){
         Eleicao teste1 = new Eleicao("Teste1", null, null);
         Eleicao teste2 = new Eleicao("Teste2", null, null);
-        
-
-        list.add(teste1);
-        list.add(teste2);
+ 
+        listaEleicao.add(teste1);
+        listaEleicao.add(teste2);
     }
     
     
-    /*private Eleicao eleicao;
-    public ArrayList<> getList(){
-        ArrayList<Eleicao> list = eleicao.getList();
-        Object rowData[] = new Object[4];
-        for(int i = 0; i< list.size(); i++){
-            rowData[0] = list.get(i).nome;
+    //Adiciona à jList (listEleicoes) o nome das eleições presentes no ArrayList<Eleicao>
+    public void addLista(){
+        addToArraylistaEleicoes();
+        DefaultListModel listModel = new DefaultListModel();
+        //listEleicoes.setModel(new DefaultComboBoxModel<>(list.get(0).getNome()));
+        for (int i = 0; i < listaEleicao.size(); i++){
+            listModel.addElement(listaEleicao.get(i).getNome());
         }
-    
-    //String[] names = {"Teste 1", Teste 2"};
-    //listEleicoes.setModel(new DefaultComboBoxModel<>(names));
-        
-    }*/
+        listEleicoes.setModel(listModel);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
