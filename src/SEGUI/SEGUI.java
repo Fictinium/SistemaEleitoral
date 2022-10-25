@@ -37,7 +37,6 @@ public class SEGUI extends javax.swing.JFrame {
         btnLimpar = new javax.swing.JButton();
         btnEnviar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -117,20 +116,7 @@ public class SEGUI extends javax.swing.JFrame {
             .addGap(0, 415, Short.MAX_VALUE)
         );
 
-        listEleicoesTab.addTab("tab2", jPanel2);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 672, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 415, Short.MAX_VALUE)
-        );
-
-        listEleicoesTab.addTab("tab3", jPanel3);
+        listEleicoesTab.addTab("Resultados", jPanel2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -195,7 +181,6 @@ public class SEGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnLimpar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPasswordField jPasswordField;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> listEleicoes;
