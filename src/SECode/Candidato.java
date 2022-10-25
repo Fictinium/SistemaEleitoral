@@ -15,10 +15,18 @@ public class Candidato {
     private String nome;
     private int votos;
     
-    Candidato(String nome){
+    public Candidato(String nome){
         this.ID = (int)(Math.random()*100000000);
         this.nome = nome;
         this.votos = 0;
+    }
+    
+    public String getNome(){
+        return this.nome;
+    }
+    
+    public void setNome(String nome){
+        this.nome = nome;
     }
     
     public int getVotos(){

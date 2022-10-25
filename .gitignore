@@ -5,3 +5,4 @@ nbproject/genfiles.properties
 nbproject/build-impl.xml
 *.xml
 *.properties
+/dist/

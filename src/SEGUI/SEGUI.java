@@ -7,10 +7,13 @@ package SEGUI;
 
 import SECode.Eleicao;
 import SECode.Eleitor;
+import SECode.Candidato;
 import java.util.ArrayList;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.JList;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 
 /**
@@ -28,8 +31,10 @@ public class SEGUI extends javax.swing.JFrame {
     }
     
     
-    //Array de Eleições
-    ArrayList<Eleicao> listaEleicao = new ArrayList<>();
+    
+    ArrayList<Eleicao> listaEleicao = new ArrayList<>(); //Array de Eleições
+    ArrayList<Candidato> candidatos = new ArrayList<>(); //Array de Candidato
+
     
     //TESTE: Adiciona dois elementos às ao ArrayList<Eleicao>
     public void addToArraylistaEleicoes(){
@@ -38,6 +43,14 @@ public class SEGUI extends javax.swing.JFrame {
  
         listaEleicao.add(teste1);
         listaEleicao.add(teste2);
+    }
+    
+    public void addToArrayCandidatos(){
+        Candidato candidato1 = new Candidato("Candidato 1");
+        Candidato candidato2 = new Candidato("Candidato 2");
+ 
+        candidatos.add(candidato1);
+        candidatos.add(candidato2);
     }
     
     
@@ -61,6 +74,9 @@ public class SEGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFrameVotacao = new javax.swing.JFrame();
+        jPanel3 = new javax.swing.JPanel();
+        jRadioButton1 = new javax.swing.JRadioButton();
         listEleicoesTab = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -75,12 +91,49 @@ public class SEGUI extends javax.swing.JFrame {
         txtNome = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
 
+        jFrameVotacao.setMinimumSize(new java.awt.Dimension(300, 300));
+
+        jRadioButton1.setText("jRadioButton1");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(69, 69, 69)
+                .addComponent(jRadioButton1)
+                .addContainerGap(226, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(93, 93, 93)
+                .addComponent(jRadioButton1)
+                .addContainerGap(186, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jFrameVotacaoLayout = new javax.swing.GroupLayout(jFrameVotacao.getContentPane());
+        jFrameVotacao.getContentPane().setLayout(jFrameVotacaoLayout);
+        jFrameVotacaoLayout.setHorizontalGroup(
+            jFrameVotacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jFrameVotacaoLayout.setVerticalGroup(
+            jFrameVotacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         listEleicoes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         listEleicoes.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         listEleicoes.setToolTipText("");
         listEleicoes.setName(""); // NOI18N
+        listEleicoes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listEleicoesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(listEleicoes);
 
         txtFieldEmail.addActionListener(new java.awt.event.ActionListener() {
@@ -208,6 +261,42 @@ public class SEGUI extends javax.swing.JFrame {
         Eleitor eleitor = new Eleitor(nome, email, password);
     }//GEN-LAST:event_btnEnviarActionPerformed
 
+    private void listEleicoesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listEleicoesMouseClicked
+        //int i = listEleicoes.getSelectedIndex();
+        addToArrayCandidatos();
+        final JFrame parent = new JFrame();
+        final JPanel panel = new JPanel();
+
+        for (int i = 0; i < candidatos.size(); i++){
+            panel.add(new JRadioButton(candidatos.get(0).getNome()));
+        }
+        
+        
+
+//parent.pack();
+        //parent.setVisible(true);
+
+        JOptionPane.showOptionDialog(null, panel, "Radio Test",JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+    
+
+        
+        //parent.add(button);
+
+        
+        //button.addActionListener(new java.awt.event.ActionListener() {
+            //@Override
+            //public void actionPerformed(java.awt.event.ActionEvent evt) {
+                /*String name = JOptionPane.showInputDialog(parent,
+                        "Votação?", null);*/
+           //}
+         //});
+        
+        //jFrameVotacao.setTitle(listaEleicao.get(i).getNome());
+        
+        //jFrameVotacao.setVisible(true);
+       
+    }//GEN-LAST:event_listEleicoesMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -246,8 +335,11 @@ public class SEGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviar;
     private javax.swing.JButton btnLimpar;
+    private javax.swing.JFrame jFrameVotacao;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> listEleicoes;
     private javax.swing.JTabbedPane listEleicoesTab;
