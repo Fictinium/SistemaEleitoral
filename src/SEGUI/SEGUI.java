@@ -59,6 +59,7 @@ public class SEGUI extends javax.swing.JFrame {
         listaEleicao.add(teste2);
     }
     
+    //TESTE: Adiciona dois elementos às ao ArrayList<Candidatos>
     public void addToArrayCandidatos(){
         Candidato candidato1 = new Candidato("Candidato 1");
         Candidato candidato2 = new Candidato("Candidato 2");
@@ -257,58 +258,55 @@ public class SEGUI extends javax.swing.JFrame {
         Eleitor eleitor = new Eleitor(nome, email, password);
     }//GEN-LAST:event_btnEnviarActionPerformed
     
-    
-        public void addOption(JPanel p, ButtonGroup g, String t) {
+    // Adiciona RadioButtons a um grupo e ao JPanel
+        public void addRadioOption(JPanel p, ButtonGroup g, String t) {
             JRadioButton b = new JRadioButton(t);
             b.setActionCommand(t);
             p.add(b);
             g.add(b);
          }
     
-        ButtonGroup group = null;
+         // Variavel global grupo
+        ButtonGroup grupo = null;
 
+    // Após selecionar uma eleição da lista, cria uma nova tab com todos os candidatos
     private void listEleicoesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listEleicoesMouseClicked
-        //int i = listEleicoes.getSelectedIndex();
         
-        
-        
+        //TESTE: Executa função que adiciona candidatos ficticios ao array
         addToArrayCandidatos();
         
         final JPanel panel = new JPanel();
-
-        
-        JButton btn = new JButton("Votar");
-
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        
-        
-        JLabel label = new JLabel();
-        JTextField txt = new JTextField();
-        
 
+        // Cria botão votar e botão cancelar
+        JButton btn = new JButton("Votar");
+        JButton btnCancelar = new JButton("Cancelar");        
       
-        group = new ButtonGroup();
+        grupo = new ButtonGroup();
+
+        // Adiciona RadioButtons ao grupo e ao JPanel com o nome de todos os candidatos na ArrayList Candidatos
         for (int i = 0; i < candidatos.size(); i++){
-                    addOption(panel,group,candidatos.get(i).getNome());
+            addRadioOption(panel,grupo,candidatos.get(i).getNome());
         }
         
+        // Adiciona evento ao clicar no botão "btn" e adiciona-o ao JPanel
         btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRadioActionPerformed(evt);
+                btnVotarActionPerformed(evt);
             }
-            });
-
+        });
         panel.add(btn);
         
-
+        // Cria nova tab na interface do programa com o nome votar
         menuTabs.addTab("Votar", panel);
 
 
        
     }//GEN-LAST:event_listEleicoesMouseClicked
 
-    public void btnRadioActionPerformed(ActionEvent e) {
-                ButtonModel b = group.getSelection();
+    // Ação do botão votar, este adquire o texto do RadioButton selecionado e imprime-o no terminal
+    public void btnVotarActionPerformed(ActionEvent e) {
+                ButtonModel b = grupo.getSelection();
                 String t = "Not selected";
                 if (b!=null) t = b.getActionCommand();
                 System.out.println(t);
