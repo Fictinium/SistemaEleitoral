@@ -7,6 +7,7 @@ package SECode;
 
 import java.util.ArrayList;
 import java.util.Date;
+import javax.swing.JList;
 
 /**
  *
@@ -27,6 +28,30 @@ public class Eleicao {
         this.candidatos = new ArrayList<Candidato>();
         this.eleitores = new ArrayList<Eleitor>();
     }
+    
+    
+    ArrayList<Eleicao> list = new ArrayList<>();
+    
+    public void addListaEleicoes(){
+        Eleicao teste1 = new Eleicao("Teste1", null, null);
+        Eleicao teste2 = new Eleicao("Teste2", null, null);
+
+        list.add(teste1);
+        list.add(teste2);
+    }
+    
+    public void setList(ArrayList list) {
+        this.list = list;
+    }
+    
+     public ArrayList<Eleicao> getList() {
+        return list;
+    }
+   
+       
+       
+       
+       
     
     public String getNome(){
         return this.nome;

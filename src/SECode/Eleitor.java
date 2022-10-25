@@ -19,7 +19,7 @@ public class Eleitor {
     private String password;
     private ArrayList<Candidato> votacoes;
     
-    Eleitor(String nome, String email, String password){
+    public Eleitor(String nome, String email, String password){
         this.ID = (int)(Math.random()*100000000);
         this.nome = nome;
         this.email = email;

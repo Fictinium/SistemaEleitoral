@@ -5,6 +5,12 @@
  */
 package SEGUI;
 
+import SECode.Eleicao;
+import SECode.Eleitor;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+
+
 /**
  *
  * @author Utilizador
@@ -15,8 +21,22 @@ public class SEGUI extends javax.swing.JFrame {
      * Creates new form SEGUI
      */
     public SEGUI() {
-        initComponents();
+        initComponents();       
     }
+    
+    
+    /*private Eleicao eleicao;
+    public ArrayList<> getList(){
+        ArrayList<Eleicao> list = eleicao.getList();
+        Object rowData[] = new Object[4];
+        for(int i = 0; i< list.size(); i++){
+            rowData[0] = list.get(i).nome;
+        }
+    
+    //String[] names = {"Teste 1", Teste 2"};
+    //listEleicoes.setModel(new DefaultComboBoxModel<>(names));
+        
+    }*/
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -31,56 +51,72 @@ public class SEGUI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listEleicoes = new javax.swing.JList<>();
-        TxtFieldNome = new javax.swing.JTextField();
-        TxtFieldEmail = new javax.swing.JTextField();
-        jPasswordField = new javax.swing.JPasswordField();
+        txtFieldNome = new javax.swing.JTextField();
+        txtFieldEmail = new javax.swing.JTextField();
+        txtFieldPassword = new javax.swing.JPasswordField();
         btnLimpar = new javax.swing.JButton();
         btnEnviar = new javax.swing.JButton();
+        txtPassword = new javax.swing.JLabel();
+        txtEmail = new javax.swing.JLabel();
+        txtNome = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        listEleicoes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         listEleicoes.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        listEleicoes.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Associação de Estudantes", "Nucleo de Estudantes", "Presidência" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         listEleicoes.setToolTipText("");
+        listEleicoes.setName(""); // NOI18N
         jScrollPane1.setViewportView(listEleicoes);
-        listEleicoes.getAccessibleContext().setAccessibleName("");
 
-        TxtFieldNome.setText("Nome");
-
-        TxtFieldEmail.setText("Email");
-        TxtFieldEmail.addActionListener(new java.awt.event.ActionListener() {
+        txtFieldEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TxtFieldEmailActionPerformed(evt);
+                txtFieldEmailActionPerformed(evt);
             }
         });
 
-        jPasswordField.setText("jPasswordField1");
+        txtFieldPassword.setToolTipText("");
 
         btnLimpar.setText("Limpar");
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
 
         btnEnviar.setText("Enviar");
+        btnEnviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnviarActionPerformed(evt);
+            }
+        });
+
+        txtPassword.setText("Password");
+
+        txtEmail.setText("Email");
+
+        txtNome.setText("Nome");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                        .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(TxtFieldNome)
-                    .addComponent(TxtFieldEmail)
-                    .addComponent(jPasswordField))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtFieldNome)
+                        .addComponent(txtFieldEmail)
+                        .addComponent(txtFieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPassword)
+                    .addComponent(txtEmail)
+                    .addComponent(txtNome))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -90,12 +126,18 @@ public class SEGUI extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(TxtFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(51, 51, 51)
+                .addComponent(txtNome)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(TxtFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtEmail)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtPassword)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtFieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -135,9 +177,22 @@ public class SEGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void TxtFieldEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtFieldEmailActionPerformed
+    private void txtFieldEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldEmailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TxtFieldEmailActionPerformed
+    }//GEN-LAST:event_txtFieldEmailActionPerformed
+
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+        txtFieldNome.setText("");
+        txtFieldEmail.setText("");
+        txtFieldPassword.setText("");
+    }//GEN-LAST:event_btnLimparActionPerformed
+
+    private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
+        String nome = txtFieldNome.getText();
+        String email = txtFieldEmail.getText();
+        String password = txtFieldPassword.getText();
+        Eleitor eleitor = new Eleitor(nome, email, password);
+    }//GEN-LAST:event_btnEnviarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -175,15 +230,18 @@ public class SEGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField TxtFieldEmail;
-    private javax.swing.JTextField TxtFieldNome;
     private javax.swing.JButton btnEnviar;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPasswordField jPasswordField;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> listEleicoes;
     private javax.swing.JTabbedPane listEleicoesTab;
+    private javax.swing.JLabel txtEmail;
+    private javax.swing.JTextField txtFieldEmail;
+    private javax.swing.JTextField txtFieldNome;
+    private javax.swing.JPasswordField txtFieldPassword;
+    private javax.swing.JLabel txtNome;
+    private javax.swing.JLabel txtPassword;
     // End of variables declaration//GEN-END:variables
 }
