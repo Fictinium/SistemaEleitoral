@@ -23,6 +23,14 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import static SECode.SecurityConsole.createAssimKeys;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import utils.SecurityUtils;
 
 /**
  *
@@ -40,7 +48,9 @@ public class SEGUI extends javax.swing.JFrame {
     }
     
     
-    
+    boolean loggedIn = false;
+    Eleitor loggedEleitor;
+    ArrayList<Eleitor> eleitores = new ArrayList<>();
     ArrayList<Eleicao> listaEleicao = new ArrayList<>(); //Array de Eleições
     ArrayList<Candidato> candidatos = new ArrayList<>(); //Array de Candidato
 
@@ -94,10 +104,11 @@ public class SEGUI extends javax.swing.JFrame {
         txtFieldEmail = new javax.swing.JTextField();
         txtFieldPassword = new javax.swing.JPasswordField();
         btnLimpar = new javax.swing.JButton();
-        btnEnviar = new javax.swing.JButton();
+        btnEntrar = new javax.swing.JButton();
         txtPassword = new javax.swing.JLabel();
         txtEmail = new javax.swing.JLabel();
         txtNome = new javax.swing.JLabel();
+        btnRegistar = new javax.swing.JButton();
         jPanelResultados = new javax.swing.JPanel();
         comboBoxEleicoes = new javax.swing.JComboBox<>();
         txtTituloEleicao = new javax.swing.JLabel();
@@ -132,10 +143,10 @@ public class SEGUI extends javax.swing.JFrame {
             }
         });
 
-        btnEnviar.setText("Enviar");
-        btnEnviar.addActionListener(new java.awt.event.ActionListener() {
+        btnEntrar.setText("Entrar");
+        btnEntrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEnviarActionPerformed(evt);
+                btnEntrarActionPerformed(evt);
             }
         });
 
@@ -144,6 +155,13 @@ public class SEGUI extends javax.swing.JFrame {
         txtEmail.setText("Email");
 
         txtNome.setText("Nome");
+
+        btnRegistar.setText("Registar");
+        btnRegistar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelEleicoesLayout = new javax.swing.GroupLayout(jPanelEleicoes);
         jPanelEleicoes.setLayout(jPanelEleicoesLayout);
@@ -156,13 +174,16 @@ public class SEGUI extends javax.swing.JFrame {
                         .addGroup(jPanelEleicoesLayout.createSequentialGroup()
                             .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(txtFieldNome)
                         .addComponent(txtFieldEmail)
                         .addComponent(txtFieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtPassword)
                     .addComponent(txtEmail)
-                    .addComponent(txtNome))
+                    .addComponent(txtNome)
+                    .addGroup(jPanelEleicoesLayout.createSequentialGroup()
+                        .addGap(166, 166, 166)
+                        .addComponent(btnRegistar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -188,8 +209,10 @@ public class SEGUI extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanelEleicoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnRegistar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         menuTabs.addTab("Lista de Eleiçõoes", jPanelEleicoes);
@@ -238,13 +261,27 @@ public class SEGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     boolean autenticado = false;
-    private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
-        String nome = txtFieldNome.getText();
+    private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
         String email = txtFieldEmail.getText();
-        String password = txtFieldPassword.getText();
-        Eleitor eleitor = new Eleitor(nome, email, password);
-        autenticado = true;
-    }//GEN-LAST:event_btnEnviarActionPerformed
+        String password = txtFieldPassword.getSelectedText();
+        for(Eleitor eleitor: eleitores){
+            if(email.equals(eleitor.getEmail())){
+                try {
+                    byte[] encryptedPass = Files.readAllBytes(Paths.get(email + "EncryptedPassword"));
+                    byte[] decryptedPass = SecurityUtils.decrypt(encryptedPass, eleitor.getPrivateKey());
+                    if(decryptedPass.equals((email + password).getBytes(Charset.forName("UTF-8")))){
+                        loggedEleitor = eleitor;
+                        loggedIn = true;
+                        break;
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(SEGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Logger.getLogger(SEGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnEntrarActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         txtFieldNome.setText("");
@@ -336,6 +373,19 @@ public class SEGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Preencha os seus dados primeiro", "Aviso!",JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_listEleicoesMouseClicked
+
+    private void btnRegistarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistarActionPerformed
+        try {
+            String nome = txtFieldNome.getText();
+            String email = txtFieldEmail.getText();
+            String password = txtFieldPassword.getSelectedText();
+            Eleitor eleitor = new Eleitor(nome, email, password);
+            createAssimKeys(eleitor);
+            eleitores.add(eleitor);
+        } catch (Exception ex) {
+            Logger.getLogger(SEGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnRegistarActionPerformed
     
     // Adiciona RadioButtons a um grupo e ao JPanel
         public void addRadioOption(JPanel p, ButtonGroup g, String t) {
@@ -412,8 +462,9 @@ public class SEGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnEnviar;
+    private javax.swing.JButton btnEntrar;
     private javax.swing.JButton btnLimpar;
+    private javax.swing.JButton btnRegistar;
     private javax.swing.JComboBox<String> comboBoxEleicoes;
     private javax.swing.JPanel jPanelEleicoes;
     private javax.swing.JPanel jPanelResultados;
