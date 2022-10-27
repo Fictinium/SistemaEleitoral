@@ -7,7 +7,6 @@ package SECode;
 
 import java.util.ArrayList;
 import java.util.Date;
-import javax.swing.JList;
 
 /**
  *
