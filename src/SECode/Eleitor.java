@@ -33,7 +33,7 @@ public class Eleitor {
         return this.nome;
     }
     
-    protected String getEmail(){
+    public String getEmail(){
         return this.email;
     }
     
@@ -45,7 +45,7 @@ public class Eleitor {
         this.password = password;
     }
     
-    protected Key getPrivateKey(){
+    public Key getPrivateKey(){
         return privateKey;
     }
     

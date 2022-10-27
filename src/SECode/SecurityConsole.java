@@ -22,7 +22,7 @@ public class SecurityConsole{
         byte[] pass = (eleitor.getEmail() + eleitor.getPassword()).getBytes(Charset.forName("UTF-8"));
         
         KeyPair kp = SecurityUtils.generateRSAKeyPair(2048);
-        SecurityUtils.saveKey(kp, "keypair");
+        SecurityUtils.saveKey(kp, eleitor.getEmail() + "KeyPair");
         
         byte[] encryptedPass = SecurityUtils.encrypt(pass, kp.getPublic());
         Files.write(Paths.get(eleitor.getEmail() + "EncryptedPassword"), encryptedPass);
