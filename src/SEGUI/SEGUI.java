@@ -8,14 +8,15 @@ package SEGUI;
 import SECode.Eleicao;
 import SECode.Eleitor;
 import SECode.Candidato;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
+
+import static SECode.SecurityConsole.createAssimKeys;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -23,6 +24,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+
 import static SECode.SecurityConsole.createAssimKeys;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -30,6 +32,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utils.SecurityUtils;
 import utils.SecurityUtils;
 
 /**
@@ -143,10 +146,17 @@ public class SEGUI extends javax.swing.JFrame {
             }
         });
 
+
         btnEntrar.setText("Entrar");
         btnEntrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEntrarActionPerformed(evt);
+
+        btnRegistar.setText("Registar");
+        btnRegistar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistarActionPerformed(evt);
+
             }
         });
 
@@ -156,12 +166,6 @@ public class SEGUI extends javax.swing.JFrame {
 
         txtNome.setText("Nome");
 
-        btnRegistar.setText("Registar");
-        btnRegistar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegistarActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanelEleicoesLayout = new javax.swing.GroupLayout(jPanelEleicoes);
         jPanelEleicoes.setLayout(jPanelEleicoesLayout);
@@ -177,7 +181,13 @@ public class SEGUI extends javax.swing.JFrame {
                             .addComponent(btnEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(txtFieldNome)
                         .addComponent(txtFieldEmail)
-                        .addComponent(txtFieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtFieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnRegistar, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                                .addComponent(btnEntrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addComponent(txtPassword)
                     .addComponent(txtEmail)
                     .addComponent(txtNome)
@@ -209,10 +219,10 @@ public class SEGUI extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanelEleicoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnRegistar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                    .addComponent(btnRegistar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         menuTabs.addTab("Lista de Eleiçõoes", jPanelEleicoes);
@@ -289,9 +299,19 @@ public class SEGUI extends javax.swing.JFrame {
         txtFieldPassword.setText("");
     }//GEN-LAST:event_btnLimparActionPerformed
 
-    private void txtFieldEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldEmailActionPerformed
+
+    private void btnRegistarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistarActionPerformed
+        try {
+            String nome = txtFieldNome.getText();
+            String email = txtFieldEmail.getText();
+            String password = txtFieldPassword.getSelectedText();
+            Eleitor eleitor = new Eleitor(nome, email, password);
+            createAssimKeys(eleitor);
+            eleitores.add(eleitor);
+        } catch (Exception ex) {
+            Logger.getLogger(SEGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnRegistarActionPerformed
 
     // Após selecionar uma eleição da lista, cria uma nova tab com todos os candidatos
     private void listEleicoesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listEleicoesMouseClicked
@@ -414,8 +434,7 @@ public class SEGUI extends javax.swing.JFrame {
     public void fechaAbaVotar(){
         Component selected = menuTabs.getSelectedComponent();
         int tabCount = menuTabs.getTabCount(), i;
-        
-        // Proocura index da Tab/aba com o nome "Votar" e fecha-a
+        // Procura index da Tab/aba com o nome "Votar" e fecha-a
         for (i=0; i < tabCount; i++) {
           String tabTitle = menuTabs.getTitleAt(i);
           if(tabTitle.equals("Votar")){
@@ -425,7 +444,32 @@ public class SEGUI extends javax.swing.JFrame {
         }
         menuTabs.setSelectedIndex(0);
     }
-    
+ 
+       
+    }//GEN-LAST:event_listEleicoesMouseClicked
+
+    private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
+        String email = txtFieldEmail.getText();
+        String password = txtFieldPassword.getSelectedText();
+        for(Eleitor eleitor: eleitores){
+            if(email.equals(eleitor.getEmail())){
+                try {
+                    byte[] encryptedPass = Files.readAllBytes(Paths.get(email + "EncryptedPassword"));
+                    byte[] decryptedPass = SecurityUtils.decrypt(encryptedPass, eleitor.getPrivateKey());
+                    if(decryptedPass.equals((email + password).getBytes(Charset.forName("UTF-8")))){
+                        loggedEleitor = eleitor;
+                        loggedIn = true;
+                        break;
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(SEGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Logger.getLogger(SEGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnEntrarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -465,6 +509,7 @@ public class SEGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnEntrar;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnRegistar;
+
     private javax.swing.JComboBox<String> comboBoxEleicoes;
     private javax.swing.JPanel jPanelEleicoes;
     private javax.swing.JPanel jPanelResultados;
