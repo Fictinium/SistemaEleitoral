@@ -39,6 +39,7 @@ import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
+import security.integrity.Integrity;
 import utils.SecurityUtils;
 import utils.SecurityUtils;
 
@@ -119,6 +120,7 @@ public class SEGUI extends javax.swing.JFrame {
         txtEmail = new javax.swing.JLabel();
         txtNome = new javax.swing.JLabel();
         btnRegistar = new javax.swing.JButton();
+        txtAlert = new javax.swing.JLabel();
         jPanelResultados = new javax.swing.JPanel();
         comboBoxEleicoes = new javax.swing.JComboBox<>();
         txtTituloEleicao = new javax.swing.JLabel();
@@ -178,21 +180,26 @@ public class SEGUI extends javax.swing.JFrame {
         jPanelEleicoesLayout.setHorizontalGroup(
             jPanelEleicoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelEleicoesLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
                 .addGroup(jPanelEleicoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelEleicoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanelEleicoesLayout.createSequentialGroup()
-                            .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(txtFieldNome)
-                        .addComponent(txtFieldEmail)
-                        .addComponent(txtFieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnRegistar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(txtPassword)
-                    .addComponent(txtEmail)
-                    .addComponent(txtNome))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                    .addGroup(jPanelEleicoesLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addGroup(jPanelEleicoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelEleicoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanelEleicoesLayout.createSequentialGroup()
+                                    .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtFieldNome)
+                                .addComponent(txtFieldEmail)
+                                .addComponent(txtFieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnRegistar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(txtPassword)
+                            .addComponent(txtEmail)
+                            .addComponent(txtNome)))
+                    .addGroup(jPanelEleicoesLayout.createSequentialGroup()
+                        .addGap(163, 163, 163)
+                        .addComponent(txtAlert)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanelEleicoesLayout.setVerticalGroup(
@@ -202,7 +209,9 @@ public class SEGUI extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanelEleicoesLayout.createSequentialGroup()
-                .addGap(51, 51, 51)
+                .addGap(22, 22, 22)
+                .addComponent(txtAlert)
+                .addGap(15, 15, 15)
                 .addComponent(txtNome)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -220,7 +229,7 @@ public class SEGUI extends javax.swing.JFrame {
                     .addComponent(btnEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnRegistar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         menuTabs.addTab("Lista de Eleiçõoes", jPanelEleicoes);
@@ -276,7 +285,8 @@ public class SEGUI extends javax.swing.JFrame {
                 try {
                     byte[] encryptedPass = Files.readAllBytes(Paths.get(email + "EncryptedPassword"));
                     byte[] decryptedPass = SecurityUtils.decrypt(encryptedPass, eleitor.getPrivateKey());
-                    if(decryptedPass.equals((email + password).getBytes(Charset.forName("UTF-8")))){
+                    String passHashString = Integrity.getHash(password.getBytes("UTF-8")).toString();
+                    if(decryptedPass == (email + passHashString).getBytes(Charset.forName("UTF-8"))){
                         loggedEleitor = eleitor;
                         loggedIn = true;
                         System.out.println("loggedIn");
@@ -303,12 +313,36 @@ public class SEGUI extends javax.swing.JFrame {
     
     private void btnRegistarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistarActionPerformed
         try {
-            String nome = txtFieldNome.getText();
-            String email = txtFieldEmail.getText();
-            String password = txtFieldPassword.getSelectedText();
-            Eleitor eleitor = new Eleitor(nome, email, password);
-            createAssimKeys(eleitor);
-            eleitores.add(eleitor);
+            if(txtFieldNome.getText().isBlank() || txtFieldEmail.getText().isBlank() || txtFieldPassword.getSelectedText().isBlank()){
+                String auxTxt = "";
+                if(txtFieldNome.getText().isBlank()){
+                    auxTxt += "The name is missing.";
+                }
+                if(txtFieldEmail.getText().isBlank()){
+                    auxTxt += "/nThe e-mail is missing.";
+                }
+                if(txtFieldPassword.getSelectedText().isBlank()){
+                    auxTxt += "/nThe password is missing.";
+                }
+                txtAlert.setText(auxTxt);
+            }else{
+                boolean match = false;
+                String email = txtFieldEmail.getText();
+                for(Eleitor eleitor: eleitores){
+                    if(eleitor.getEmail().equals(email)) match = true; break;
+                }
+                if(!match){
+                    String nome = txtFieldNome.getText();
+                    String password = txtFieldPassword.getSelectedText();
+                    Eleitor eleitor = new Eleitor(nome, email, password);
+                    createAssimKeys(eleitor);
+                    eleitores.add(eleitor);
+                    txtAlert.setText("Account successfully registered!");
+                }else{
+                    txtAlert.setText("This user already exists!");
+                }
+            }
+
         } catch (Exception ex) {
             Logger.getLogger(SEGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -479,6 +513,7 @@ public class SEGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> listEleicoes;
     private javax.swing.JTabbedPane menuTabs;
+    private javax.swing.JLabel txtAlert;
     private javax.swing.JLabel txtEmail;
     private javax.swing.JTextField txtFieldEmail;
     private javax.swing.JTextField txtFieldNome;

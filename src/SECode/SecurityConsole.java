@@ -9,6 +9,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.KeyPair;
+import security.integrity.Integrity;
 import utils.SecurityUtils;
 
 /**
@@ -19,7 +20,11 @@ public class SecurityConsole{
     
     public static void createAssimKeys(Eleitor eleitor) throws Exception{
         
-        byte[] pass = (eleitor.getEmail() + eleitor.getPassword()).getBytes(Charset.forName("UTF-8"));
+        byte[] passwordBytes = (eleitor.getPassword()).getBytes(Charset.forName("UTF-8"));
+        byte[] passwordHash = Integrity.getHash(passwordBytes, "SHA-256");
+        String passwordHashString = passwordHash.toString();
+        
+        byte[] pass = (eleitor.getEmail() + passwordHashString).getBytes(Charset.forName("UTF-8"));
         
         KeyPair kp = SecurityUtils.generateRSAKeyPair(2048);
         SecurityUtils.saveKey(kp, eleitor.getEmail() + "KeyPair");
@@ -28,6 +33,6 @@ public class SecurityConsole{
         Files.write(Paths.get(eleitor.getEmail() + "EncryptedPassword"), encryptedPass);
         
         eleitor.setPrivateKey(kp.getPrivate());
-        SecurityUtils.saveKey(kp.getPrivate(), eleitor.getEmail() + "PrivateKey");
+        SecurityUtils.saveKey(kp.getPublic(), eleitor.getEmail() + "PublicKey");
     }
 }
