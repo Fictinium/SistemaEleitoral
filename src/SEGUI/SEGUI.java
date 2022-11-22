@@ -58,12 +58,16 @@ public class SEGUI extends javax.swing.JFrame {
         addToArrayCandidatos();
     }
     
-    
+    //variável para verificar de existe um utilizador autenticado
     boolean loggedIn = false;
+    //variável para tratar do utilizador autenticado
     Eleitor loggedEleitor;
+    //lista de eleitores totais
     ArrayList<Eleitor> eleitores = new ArrayList<>();
-    ArrayList<Eleicao> listaEleicao = new ArrayList<>(); //Array de Eleições
-    ArrayList<Candidato> candidatos = new ArrayList<>(); //Array de Candidato
+    //lista de eleições totais
+    ArrayList<Eleicao> listaEleicao = new ArrayList<>();
+    //lista de candidatos totais
+    ArrayList<Candidato> candidatos = new ArrayList<>();
 
     
     //TESTE: Adiciona dois elementos às ao ArrayList<Eleicao>
@@ -95,6 +99,7 @@ public class SEGUI extends javax.swing.JFrame {
         for (int i = 0; i < listaEleicao.size(); i++){
             listModel.addElement(listaEleicao.get(i).getNome());
         }
+        //adiciona todas as eleições ao painel "listEleicoes" (parte da UI)
         listEleicoes.setModel(listModel);
     }
 
@@ -199,8 +204,9 @@ public class SEGUI extends javax.swing.JFrame {
                     .addGroup(jPanelEleicoesLayout.createSequentialGroup()
                         .addGap(163, 163, 163)
                         .addComponent(txtAlert)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanelEleicoesLayout.setVerticalGroup(
             jPanelEleicoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -245,7 +251,7 @@ public class SEGUI extends javax.swing.JFrame {
                 .addComponent(comboBoxEleicoes, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(171, 171, 171)
                 .addComponent(txtTituloEleicao)
-                .addContainerGap(250, Short.MAX_VALUE))
+                .addContainerGap(260, Short.MAX_VALUE))
         );
         jPanelResultadosLayout.setVerticalGroup(
             jPanelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,9 +269,7 @@ public class SEGUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(menuTabs)
-                .addContainerGap())
+            .addComponent(menuTabs)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -277,17 +281,26 @@ public class SEGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {                                          
+    //código para um cliente se autenticar quando se clica no botão "btnEntrar"
+    private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {
+        //email (string) inserido na caixa de texto "txtFieldEmail"
         String email = txtFieldEmail.getText();
+        //password (string) inserida na caixa de texto "txtFieldPassword"
         String password = txtFieldPassword.getSelectedText();
+        //loop "for each" que verifica se o email inserido existe na BD
         for(Eleitor eleitor: eleitores){
+            //if statement que compara o email inserido com o email da BD
             if(email.equals(eleitor.getEmail())){
                 try {
+                    //processo de decriptação (processo de encriptação no ficheiro SecurityConsole.java inverso)
                     byte[] encryptedPass = Files.readAllBytes(Paths.get(email + "EncryptedPassword"));
                     byte[] decryptedPass = SecurityUtils.decrypt(encryptedPass, eleitor.getPrivateKey());
                     String passHashString = Integrity.getHash(password.getBytes("UTF-8")).toString();
+                    //verificação da palavra-passe (se estiver correta, entra)
                     if(decryptedPass == (email + passHashString).getBytes(Charset.forName("UTF-8"))){
+                        //alterar o utilizador autenticado
                         loggedEleitor = eleitor;
+                        //sinal de que alguém está eutenticado
                         loggedIn = true;
                         System.out.println("loggedIn");
                         break;
@@ -301,6 +314,7 @@ public class SEGUI extends javax.swing.JFrame {
         }
     }                                         
 
+    //função para limpar os espaços de texto
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         txtFieldNome.setText("");
         txtFieldEmail.setText("");
@@ -311,34 +325,48 @@ public class SEGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFieldEmailActionPerformed
     
+    //função para registar um novo utilizador
     private void btnRegistarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistarActionPerformed
         try {
+            //if statement para verificar se alguma caixa de texto foi deixada em branco
             if(txtFieldNome.getText().isBlank() || txtFieldEmail.getText().isBlank() || txtFieldPassword.getSelectedText().isBlank()){
                 String auxTxt = "";
+                //se o nome não foi preenchido, avisa
                 if(txtFieldNome.getText().isBlank()){
-                    auxTxt += "The name is missing.";
+                    auxTxt += "The name is- missing.";
                 }
+                //se o email não foi preenchido, avisa
                 if(txtFieldEmail.getText().isBlank()){
                     auxTxt += "/nThe e-mail is missing.";
                 }
+                //sea password não foi preenchida, avisa
                 if(txtFieldPassword.getSelectedText().isBlank()){
                     auxTxt += "/nThe password is missing.";
                 }
                 txtAlert.setText(auxTxt);
             }else{
+                //variável auxiliar
                 boolean match = false;
+                //email inserido
                 String email = txtFieldEmail.getText();
+                //loop for que verifica se já existe um utilizador com este email
                 for(Eleitor eleitor: eleitores){
                     if(eleitor.getEmail().equals(email)) match = true; break;
                 }
+                //se o email ainda não estiver registado, regista o novo utilizador
                 if(!match){
+                    //criação do eleitor com o dados inseridos
                     String nome = txtFieldNome.getText();
                     String password = txtFieldPassword.getSelectedText();
                     Eleitor eleitor = new Eleitor(nome, email, password);
+                    //criação das chaves assimétricas do utilizador
                     createAssimKeys(eleitor);
+                    //adição do utilizador à BD
                     eleitores.add(eleitor);
+                    //caixa de texto para deixar o utilizador saber que correu tudo bem
                     txtAlert.setText("Account successfully registered!");
                 }else{
+                    //se o email já existir, mostra uma caixa de texto para avisar
                     txtAlert.setText("This user already exists!");
                 }
             }
@@ -435,9 +463,9 @@ public class SEGUI extends javax.swing.JFrame {
             b.setActionCommand(t);
             p.add(b);
             g.add(b);
-         }
+        }
     
-         // Variavel global grupo e boolean votação
+        // Variavel global grupo e boolean votação
         ButtonGroup grupo = null;
         boolean votacao = false;
 
