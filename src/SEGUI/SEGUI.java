@@ -276,6 +276,7 @@ public class SEGUI extends javax.swing.JFrame {
             }
         });
 
+        votacoesTextArea.setEditable(false);
         votacoesTextArea.setColumns(20);
         votacoesTextArea.setRows(5);
         jScrollPane2.setViewportView(votacoesTextArea);
@@ -284,6 +285,7 @@ public class SEGUI extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Candidatos");
 
+        candidatosTextArea.setEditable(false);
         candidatosTextArea.setColumns(20);
         candidatosTextArea.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         candidatosTextArea.setRows(5);
