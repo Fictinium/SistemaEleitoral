@@ -57,6 +57,7 @@ public class SEGUI extends javax.swing.JFrame {
         initComponents();
         addLista();
         addToArrayCandidatos();
+        addToComboBox();
     }
     
     //variável para verificar de existe um utilizador autenticado
@@ -74,7 +75,7 @@ public class SEGUI extends javax.swing.JFrame {
     boolean votacao = false;
 
     
-    //TESTE: Adiciona dois elementos às ao ArrayList<Eleicao>
+    //TESTE: Adiciona três elementos às ao ArrayList<Eleicao>
     public void addToArraylistaEleicoes(){
         Eleicao default1 = new Eleicao("Associação de Estudantes", null, null);
         Eleicao default2 = new Eleicao("Nucleo de Estudantes", null, null);
@@ -94,6 +95,12 @@ public class SEGUI extends javax.swing.JFrame {
         candidatos.add(candidato2);
     }
     
+    //TESTE: Adiciona as eleições à lista dropdown dos resultados
+    public void addToComboBox(){
+        for(Eleicao eleicao: listaEleicao){
+            comboBoxEleicoes.addItem(eleicao.getNome());
+        }
+    }
     
     //Adiciona à jList (listEleicoes) o nome das eleições presentes no ArrayList<Eleicao>
     public void addLista(){
@@ -129,10 +136,16 @@ public class SEGUI extends javax.swing.JFrame {
         txtEmail = new javax.swing.JLabel();
         txtNome = new javax.swing.JLabel();
         btnRegistar = new javax.swing.JButton();
-        txtAlert = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        txtAlert = new javax.swing.JTextPane();
         jPanelResultados = new javax.swing.JPanel();
         comboBoxEleicoes = new javax.swing.JComboBox<>();
         txtTituloEleicao = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        votacoesTextArea = new javax.swing.JTextArea();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        candidatosTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -148,6 +161,12 @@ public class SEGUI extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(listEleicoes);
+
+        txtFieldNome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFieldNomeActionPerformed(evt);
+            }
+        });
 
         txtFieldEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -184,6 +203,12 @@ public class SEGUI extends javax.swing.JFrame {
             }
         });
 
+        txtAlert.setEditable(false);
+        txtAlert.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        txtAlert.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        txtAlert.setOpaque(false);
+        jScrollPane4.setViewportView(txtAlert);
+
         javax.swing.GroupLayout jPanelEleicoesLayout = new javax.swing.GroupLayout(jPanelEleicoes);
         jPanelEleicoes.setLayout(jPanelEleicoesLayout);
         jPanelEleicoesLayout.setHorizontalGroup(
@@ -206,45 +231,63 @@ public class SEGUI extends javax.swing.JFrame {
                             .addComponent(txtEmail)
                             .addComponent(txtNome)))
                     .addGroup(jPanelEleicoesLayout.createSequentialGroup()
-                        .addGap(163, 163, 163)
-                        .addComponent(txtAlert)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                        .addGap(101, 101, 101)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanelEleicoesLayout.setVerticalGroup(
             jPanelEleicoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelEleicoesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
-                .addContainerGap())
             .addGroup(jPanelEleicoesLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(txtAlert)
-                .addGap(15, 15, 15)
-                .addComponent(txtNome)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(txtEmail)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(txtPassword)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtFieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanelEleicoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnRegistar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanelEleicoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelEleicoesLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())
+                    .addGroup(jPanelEleicoesLayout.createSequentialGroup()
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(txtNome)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtEmail)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtPassword)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtFieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanelEleicoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnRegistar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(23, 23, 23))))
         );
 
         menuTabs.addTab("Lista de Eleiçõoes", jPanelEleicoes);
 
-        comboBoxEleicoes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboBoxEleicoes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxEleicoesActionPerformed(evt);
+            }
+        });
+
+        votacoesTextArea.setColumns(20);
+        votacoesTextArea.setRows(5);
+        jScrollPane2.setViewportView(votacoesTextArea);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Candidatos");
+
+        candidatosTextArea.setColumns(20);
+        candidatosTextArea.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        candidatosTextArea.setRows(5);
+        jScrollPane3.setViewportView(candidatosTextArea);
 
         javax.swing.GroupLayout jPanelResultadosLayout = new javax.swing.GroupLayout(jPanelResultados);
         jPanelResultados.setLayout(jPanelResultadosLayout);
@@ -252,10 +295,21 @@ public class SEGUI extends javax.swing.JFrame {
             jPanelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelResultadosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(comboBoxEleicoes, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(171, 171, 171)
-                .addComponent(txtTituloEleicao)
-                .addContainerGap(260, Short.MAX_VALUE))
+                .addGroup(jPanelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelResultadosLayout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelResultadosLayout.createSequentialGroup()
+                                .addGap(57, 57, 57)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanelResultadosLayout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanelResultadosLayout.createSequentialGroup()
+                        .addComponent(comboBoxEleicoes, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(171, 171, 171)
+                        .addComponent(txtTituloEleicao)))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
         jPanelResultadosLayout.setVerticalGroup(
             jPanelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -264,7 +318,16 @@ public class SEGUI extends javax.swing.JFrame {
                 .addGroup(jPanelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comboBoxEleicoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTituloEleicao))
-                .addContainerGap(383, Short.MAX_VALUE))
+                .addGap(31, 31, 31)
+                .addGroup(jPanelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addGroup(jPanelResultadosLayout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 124, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         menuTabs.addTab("Resultados", jPanelResultados);
@@ -277,7 +340,7 @@ public class SEGUI extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(menuTabs, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
+            .addComponent(menuTabs, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         menuTabs.getAccessibleContext().setAccessibleName("");
@@ -306,7 +369,12 @@ public class SEGUI extends javax.swing.JFrame {
                         loggedEleitor = eleitor;
                         //sinal de que alguém está eutenticado
                         loggedIn = true;
-                        System.out.println("loggedIn");
+                        //caixa de texto que confirma que o login foi bem sucedido
+                        txtAlert.setText("Successfully logged in!");
+                        //limpa os dados das caixas de texto
+                        txtFieldNome.setText("");
+                        txtFieldEmail.setText("");
+                        txtFieldPassword.setText("");
                         break;
                     }
                 } catch (IOException ex) {
@@ -337,15 +405,17 @@ public class SEGUI extends javax.swing.JFrame {
                 String auxTxt = "";
                 //se o nome não foi preenchido, avisa
                 if(txtFieldNome.getText().isBlank()){
-                    auxTxt += "The name is- missing.";
+                    auxTxt += "Name is missing.";
+                    auxTxt += "\n";
                 }
                 //se o email não foi preenchido, avisa
                 if(txtFieldEmail.getText().isBlank()){
-                    auxTxt += "/nThe e-mail is missing.";
+                    auxTxt += "E-mail is missing.";
+                    auxTxt += "\n";
                 }
                 //sea password não foi preenchida, avisa
-                if(txtFieldPassword.getSelectedText().isBlank()){
-                    auxTxt += "/nThe password is missing.";
+                if(String.valueOf(txtFieldPassword.getPassword()).isBlank()){
+                    auxTxt += "Password is missing.";
                 }
                 txtAlert.setText(auxTxt);
             }else{
@@ -367,8 +437,12 @@ public class SEGUI extends javax.swing.JFrame {
                     createAssimKeys(eleitor);
                     //adição do utilizador à BD
                     eleitores.add(eleitor);
-                    //caixa de texto para deixar o utilizador saber que correu tudo bem
+                    //caixa de texto que confirma que o registo foi bem sucedido
                     txtAlert.setText("Account successfully registered!");
+                    //limpa os dados das caixas de texto
+                    txtFieldNome.setText("");
+                    txtFieldEmail.setText("");
+                    txtFieldPassword.setText("");
                 }else{
                     //se o email já existir, mostra uma caixa de texto para avisar
                     txtAlert.setText("This user already exists!");
@@ -494,6 +568,46 @@ public class SEGUI extends javax.swing.JFrame {
         menuTabs.setSelectedIndex(0);
     }//GEN-LAST:event_listEleicoesMouseClicked
 
+    private void comboBoxEleicoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxEleicoesActionPerformed
+        //obter o nome da eleição selecionada
+        String nomeEleicao = comboBoxEleicoes.getItemAt(comboBoxEleicoes.getSelectedIndex());
+        //variáveis que vão armazenar a eleição selecionada e a respetiva lista de candidatos
+        Eleicao eleicao = null;
+        ArrayList<Candidato> candidatosEleicao = null;
+        //loop for each que encontra e seleciona a eleição pretendida
+        for(Eleicao eleicaoi: listaEleicao){
+            if(eleicaoi.getNome().equals(nomeEleicao)){
+                eleicao = eleicaoi;
+                candidatosEleicao = eleicao.getListaCandidatos();
+                break;
+            }
+        }
+        //insere os noomes dos candidatos da eleição escolhida na caixa de texto "candidatosTextArea", para visualização
+        for(Candidato candidato: candidatosEleicao){
+            candidatosTextArea.append(candidato.getNome() + "\n");
+        }
+        //loop for each para mostrar todas as votações da eleição escolhida (for each the cada eleitor)
+        for(Eleitor eleitor: eleicao.getListaEleitores()){
+            //insere a parte inicial da caixa de texto "votacoesTextArea" (nome de um eleitor)
+            votacoesTextArea.append(eleitor.getNome() + " -------> ");
+            //lista de candidatos em que o eleitor votou
+            ArrayList<Candidato> candidatosVotados = eleitor.getListaVotacoes();
+            //dois loops for each para encontrar o candidato em que o eleitor votou, relevante para a eleição selecionada
+            for(Candidato candidatoVotado: candidatosVotados){
+                for(Candidato candidato: candidatosEleicao){
+                    if(candidatoVotado.getId() == candidato.getId()){
+                        //quando encontra o candidato, insere o seu nome na caixa de texto "votacoesTextArea"
+                        votacoesTextArea.append(candidato.getNome() + "\n");
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_comboBoxEleicoesActionPerformed
+
+    private void txtFieldNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldNomeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFieldNomeActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -533,13 +647,18 @@ public class SEGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnEntrar;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnRegistar;
+    private javax.swing.JTextArea candidatosTextArea;
     private javax.swing.JComboBox<String> comboBoxEleicoes;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanelEleicoes;
     private javax.swing.JPanel jPanelResultados;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JList<String> listEleicoes;
     private javax.swing.JTabbedPane menuTabs;
-    private javax.swing.JLabel txtAlert;
+    private javax.swing.JTextPane txtAlert;
     private javax.swing.JLabel txtEmail;
     private javax.swing.JTextField txtFieldEmail;
     private javax.swing.JTextField txtFieldNome;
@@ -547,5 +666,6 @@ public class SEGUI extends javax.swing.JFrame {
     private javax.swing.JLabel txtNome;
     private javax.swing.JLabel txtPassword;
     private javax.swing.JLabel txtTituloEleicao;
+    private javax.swing.JTextArea votacoesTextArea;
     // End of variables declaration//GEN-END:variables
 }

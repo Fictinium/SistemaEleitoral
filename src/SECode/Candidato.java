@@ -21,6 +21,10 @@ public class Candidato {
         this.votos = 0;
     }
     
+    public int getId(){
+        return this.ID;
+    }
+    
     public String getNome(){
         return this.nome;
     }
