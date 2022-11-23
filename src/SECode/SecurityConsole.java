@@ -9,6 +9,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.KeyPair;
+import java.util.Arrays;
 import security.integrity.Integrity;
 import utils.SecurityUtils;
 
@@ -22,7 +23,7 @@ public class SecurityConsole{
         //transformação da palavra-passe inserida num hash dos bytes correspondentes
         byte[] passwordBytes = (eleitor.getPassword()).getBytes(Charset.forName("UTF-8"));
         byte[] passwordHash = Integrity.getHash(passwordBytes, "SHA-256");
-        String passwordHashString = passwordHash.toString();
+        String passwordHashString = Arrays.toString(passwordHash);
         //criação da palavra-passe secreta (do sistema) para o utilizador, em bytes
         byte[] pass = (eleitor.getEmail() + passwordHashString).getBytes(Charset.forName("UTF-8"));
         //criação de um novo par de chaves assimétricas
@@ -35,7 +36,5 @@ public class SecurityConsole{
         Files.write(Paths.get(eleitor.getEmail() + "EncryptedPassword"), encryptedPass);
         //atribuir a chave privada ao utilizador
         eleitor.setPrivateKey(kp.getPrivate());
-        //guardar a chave pública num ficheiro exclusivo
-        SecurityUtils.saveKey(kp.getPublic(), eleitor.getEmail() + "PublicKey");
     }
 }

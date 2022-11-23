@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
@@ -298,9 +299,9 @@ public class SEGUI extends javax.swing.JFrame {
                     //processo de decriptação (processo de encriptação no ficheiro SecurityConsole.java inverso)
                     byte[] encryptedPass = Files.readAllBytes(Paths.get(email + "EncryptedPassword"));
                     byte[] decryptedPass = SecurityUtils.decrypt(encryptedPass, eleitor.getPrivateKey());
-                    String passHashString = Integrity.getHash(password.getBytes("UTF-8")).toString();
+                    String passHashString = Arrays.toString(Integrity.getHash(password.getBytes("UTF-8"), "SHA-256"));
                     //verificação da palavra-passe (se estiver correta, entra)
-                    if(decryptedPass == (email + passHashString).getBytes(Charset.forName("UTF-8"))){
+                    if(Arrays.equals(decryptedPass, (email + passHashString).getBytes(Charset.forName("UTF-8")))){
                         //alterar o utilizador autenticado
                         loggedEleitor = eleitor;
                         //sinal de que alguém está eutenticado
