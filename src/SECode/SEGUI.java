@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package SEGUI;
+package SECode;
 
 import SECode.Eleicao;
 import SECode.Eleitor;
