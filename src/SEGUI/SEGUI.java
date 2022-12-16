@@ -47,10 +47,20 @@ import javax.swing.ButtonModel;
 import security.integrity.Integrity;
 import utils.SecurityUtils;
 import utils.SecurityUtils;
+
+import blockChain.chain.Block;
+import blockChain.miner.Miner;
+import java.awt.Color;
+import java.rmi.RemoteException;
+import javax.swing.SwingUtilities;
 import myUtils.GuiUtils;
 import myUtils.RMI;
-import blockChain.p2p.miner.IminerRemoteP2P;
-import java.awt.Color;
+import blockChain.p2p.miner.ObjectRemoteMiner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import blockChain.p2p.miner.InterfaceRemoteMiner;
+import blockChain.p2p.miner.ListenerRemoteMiner;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -82,7 +92,8 @@ public class SEGUI extends javax.swing.JFrame {
     ButtonGroup grupo = null;
     boolean votacao = false;
     
-    IminerRemoteP2P miner;
+    //objeto remoto (para minar)
+    InterfaceRemoteMiner miner;
     
     //TESTE: Adiciona três elementos às ao ArrayList<Eleicao>
     public void addToArraylistaEleicoes(){
@@ -419,6 +430,11 @@ public class SEGUI extends javax.swing.JFrame {
         jTextFieldHash.setEditable(false);
         jTextFieldHash.setText("0");
         jTextFieldHash.setBorder(javax.swing.BorderFactory.createTitledBorder("Hash"));
+        jTextFieldHash.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldHashActionPerformed(evt);
+            }
+        });
 
         jTextAreaMensagem.setColumns(20);
         jTextAreaMensagem.setRows(5);
@@ -442,49 +458,41 @@ public class SEGUI extends javax.swing.JFrame {
                             .addComponent(jSpinnerZeros)
                             .addComponent(jButtonMinerar, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)))
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelMinerarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelMinerarLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldHash)
-                        .addContainerGap())
-                    .addGroup(jPanelMinerarLayout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(jTextFieldNonce, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(51, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelMinerarLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(65, 65, 65))))
+                        .addGap(0, 28, Short.MAX_VALUE)
+                        .addGroup(jPanelMinerarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelMinerarLayout.createSequentialGroup()
+                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(29, 29, 29))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelMinerarLayout.createSequentialGroup()
+                                .addComponent(jTextFieldNonce, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(45, 45, 45))))
+                    .addComponent(jTextFieldHash)))
         );
         jPanelMinerarLayout.setVerticalGroup(
             jPanelMinerarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelMinerarLayout.createSequentialGroup()
-                .addGroup(jPanelMinerarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelMinerarLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addGroup(jPanelMinerarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButtonMinerar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonConectar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanelMinerarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jSpinnerZeros, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-                            .addComponent(jTextFieldEnderecoServidor, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10))
-                    .addGroup(jPanelMinerarLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)))
-                .addGroup(jPanelMinerarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelMinerarLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
-                        .addComponent(jTextFieldNonce, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(45, 45, 45)
-                        .addComponent(jTextFieldHash, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38))
-                    .addGroup(jPanelMinerarLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane6)
-                        .addContainerGap())))
+                .addGap(25, 25, 25)
+                .addGroup(jPanelMinerarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonMinerar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonConectar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelMinerarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jSpinnerZeros)
+                    .addComponent(jTextFieldEnderecoServidor, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane6)
+                .addContainerGap())
+            .addGroup(jPanelMinerarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                .addComponent(jTextFieldNonce, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(jTextFieldHash, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(53, 53, 53))
         );
 
         menuTabs.addTab("Minerar", jPanelMinerar);
@@ -768,7 +776,7 @@ public class SEGUI extends javax.swing.JFrame {
     //função do botão para se conectar a um servidor (PROFESSOR)
     private void jButtonConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConectarActionPerformed
         try {
-            miner = (IminerRemoteP2P) RMI.getRemote(jTextFieldEnderecoServidor.getText());
+            miner = (InterfaceRemoteMiner) RMI.getRemote(jTextFieldEnderecoServidor.getText());
             GuiUtils.insertText(jTextPaneLogs, "Connected ", miner.getAdress(), Color.GREEN, Color.MAGENTA);
         } catch (Exception ex) {
             onException("Start Remote", ex);
@@ -785,13 +793,18 @@ public class SEGUI extends javax.swing.JFrame {
                 new Thread(() -> {
                     try {
                         GuiUtils.insertText(jTextPaneLogs, "Start Mining", miner.getAdress(), Color.GREEN, Color.WHITE);
-                        jTextFieldNonce.setText("");
-                        jTextFieldHash.setText("");
-                        jButtonMinerar.setText("Stop");
+
+                        SwingUtilities.invokeLater(() -> {
+                            jTextFieldNonce.setText("");
+                            jTextFieldHash.setText("");
+                            jButtonMinerar.setText("Stop");
+                        });
                         int nonce = miner.mine(jTextAreaMensagem.getText(), (int) jSpinnerZeros.getValue());
-                        jTextFieldNonce.setText(nonce + "");
-                        jTextFieldHash.setText(Miner.getHash(jTextAreaMensagem.getText(), nonce));
-                        jButtonMinerar.setText("Start");
+                        SwingUtilities.invokeLater(() -> {
+                            jTextFieldNonce.setText(nonce + "");
+                            jTextFieldHash.setText(Miner.getHash(jTextAreaMensagem.getText(), nonce));
+                            jButtonMinerar.setText("Start");
+                        });
                     } catch (Exception ex) {
                         onException("Mining", ex);
                     }
@@ -801,6 +814,10 @@ public class SEGUI extends javax.swing.JFrame {
             onException("Mining", ex);
         }
     }//GEN-LAST:event_jButtonMinerarActionPerformed
+
+    private void jTextFieldHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldHashActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldHashActionPerformed
 
     public void onException(String title, Exception ex) {
         GuiUtils.insertText(jTextPaneLogs, title, ex.getMessage(), Color.RED, Color.MAGENTA);
