@@ -60,7 +60,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import blockChain.p2p.miner.InterfaceRemoteMiner;
 import blockChain.p2p.miner.ListenerRemoteMiner;
+import java.io.FileOutputStream;
+import java.util.Scanner;
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 
 /**
  *
@@ -73,9 +76,14 @@ public class SEGUI extends javax.swing.JFrame {
      */
     public SEGUI() {
         initComponents();
+        jPanelVotacoes.setVisible(false);
         addLista();
         addToArrayCandidatos();
         addToComboBox();
+    }
+    
+    public JPanel getPainelVotacoes(){
+        return jPanelVotacoes;
     }
     
     //variável para verificar de existe um utilizador autenticado
@@ -91,6 +99,8 @@ public class SEGUI extends javax.swing.JFrame {
     // Variavel global grupo e boolean votação
     ButtonGroup grupo = null;
     boolean votacao = false;
+    //scanner para o sistema login
+    Scanner scanner = new Scanner(System.in);
     
     //objeto remoto (para minar)
     InterfaceRemoteMiner miner;
@@ -98,8 +108,14 @@ public class SEGUI extends javax.swing.JFrame {
     //TESTE: Adiciona três elementos às ao ArrayList<Eleicao>
     public void addToArraylistaEleicoes(){
         Eleicao default1 = new Eleicao("Associação de Estudantes", null, null);
+        default1.addCandidato(new Candidato("Zé"));
+        default1.addCandidato(new Candidato("Maria"));
         Eleicao default2 = new Eleicao("Nucleo de Estudantes", null, null);
+        default2.addCandidato(new Candidato("Gertrudes"));
+        default2.addCandidato(new Candidato("Diana"));
         Eleicao default3 = new Eleicao("Presidencia", null, null);
+        default3.addCandidato(new Candidato("Laura"));
+        default3.addCandidato(new Candidato("Diogo"));
  
         listaEleicao.add(default1);
         listaEleicao.add(default2);
@@ -367,11 +383,11 @@ public class SEGUI extends javax.swing.JFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanelResultadosLayout.createSequentialGroup()
-                                .addGap(57, 57, 57)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanelResultadosLayout.createSequentialGroup()
                                 .addGap(34, 34, 34)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanelResultadosLayout.createSequentialGroup()
+                                .addGap(44, 44, 44)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanelResultadosLayout.createSequentialGroup()
                         .addComponent(comboBoxEleicoes, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(171, 171, 171)
@@ -602,6 +618,11 @@ public class SEGUI extends javax.swing.JFrame {
                     createAssimKeys(eleitor);
                     //adição do utilizador à BD
                     eleitores.add(eleitor);
+                    //ficheiro para registar os dados inseridos
+                    /*FileOutputStream fos = new FileOutputStream(email, true);
+                    byte[] infoBytes = (nome + email + password).getBytes();
+                    fos.write(infoBytes);
+                    fos.close();*/
                     //caixa de texto que confirma que o registo foi bem sucedido
                     txtAlert.setText("Account successfully registered!");
                     //limpa os dados das caixas de texto
@@ -693,6 +714,7 @@ public class SEGUI extends javax.swing.JFrame {
             panelButtons.add(btnCancelar);
             panelRadioButtons.add(panelButtons);
             teste.add(panel);
+            menuTabs.setSelectedIndex(1);
             // Cria nova tab na interface do programa com o nome votar
             menuTabs.addTab("Votar", panel);
         } else {
@@ -734,6 +756,8 @@ public class SEGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_listEleicoesMouseClicked
 
     private void comboBoxEleicoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxEleicoesActionPerformed
+        candidatosTextArea.setText(null);
+        votacoesTextArea.setText(null);
         //obter o nome da eleição selecionada
         String nomeEleicao = comboBoxEleicoes.getItemAt(comboBoxEleicoes.getSelectedIndex());
         //variáveis que vão armazenar a eleição selecionada e a respetiva lista de candidatos

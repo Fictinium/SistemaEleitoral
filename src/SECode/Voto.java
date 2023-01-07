@@ -14,7 +14,7 @@ public class Voto {
     private Eleitor eleitor;
     private Candidato candidato;
     
-    Voto(Eleitor eleitor, Candidato candidato){
+    public Voto(Eleitor eleitor, Candidato candidato){
         this.eleitor = eleitor;
         this.candidato = candidato;
     }
