@@ -241,12 +241,6 @@ public class SEGUI extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jListEleicoes);
 
-        txtFieldNome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFieldNomeActionPerformed(evt);
-            }
-        });
-
         txtFieldEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtFieldEmailActionPerformed(evt);
@@ -479,11 +473,6 @@ public class SEGUI extends javax.swing.JFrame {
         jTextFieldHash.setEditable(false);
         jTextFieldHash.setText("0");
         jTextFieldHash.setBorder(javax.swing.BorderFactory.createTitledBorder("Hash"));
-        jTextFieldHash.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldHashActionPerformed(evt);
-            }
-        });
 
         jTextAreaMensagem.setColumns(20);
         jTextAreaMensagem.setRows(5);
@@ -927,10 +916,6 @@ public class SEGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_comboBoxEleicoesActionPerformed
 
-    private void txtFieldNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldNomeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldNomeActionPerformed
-
     //função do botão para se conectar a um servidor (PROFESSOR)
     private void jButtonConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConectarActionPerformed
         try {
@@ -972,10 +957,6 @@ public class SEGUI extends javax.swing.JFrame {
             onException("Mining", ex);
         }
     }//GEN-LAST:event_jButtonMinerarActionPerformed
-
-    private void jTextFieldHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldHashActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldHashActionPerformed
 
     private void jButtonVotarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVotarActionPerformed
         if(jListVotacao.isSelectionEmpty()){
