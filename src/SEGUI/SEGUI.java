@@ -47,11 +47,14 @@ public final class SEGUI extends javax.swing.JFrame {
         initComponents();
         addLista();
         atualizarEleicoesComboBox();
-        menuTabs.remove(1);
+        escondeTabs();
     }
     
-    public JPanel getPainelVotacoes(){
-        return jPanelVotacoes;
+    //Esconde as tabs/abas "Votações", "Minerar", "Admin"
+    public void escondeTabs(){
+        menuTabs.remove(4);
+        menuTabs.remove(3);
+        menuTabs.remove(1);
     }
     
     //variável para verificar de existe um utilizador autenticado
@@ -231,6 +234,7 @@ public final class SEGUI extends javax.swing.JFrame {
 
         txtNome.setText("Nome");
 
+        btnRegistar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SEGUI/assets/registo.png"))); // NOI18N
         btnRegistar.setText("Registar");
         btnRegistar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -268,7 +272,7 @@ public final class SEGUI extends javax.swing.JFrame {
                     .addGroup(jPanelEleicoesLayout.createSequentialGroup()
                         .addGap(101, 101, 101)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -307,14 +311,18 @@ public final class SEGUI extends javax.swing.JFrame {
 
         jScrollPane5.setViewportView(jListVotacao);
 
+        jButtonVotar.setFont(new java.awt.Font("Dialog", 0, 17)); // NOI18N
+        jButtonVotar.setIcon(new javax.swing.ImageIcon("/Users/sw4rtz/Library/CloudStorage/OneDrive-InstitutoPolitécnicodeTomar/01_Escola/2_Licenciatura/3_Ano/Computação Distribuida/TP Comp. Distribuida/SistemaEleitoral/src/SEGUI/assets/votar.png")); // NOI18N
         jButtonVotar.setText("Votar");
+        jButtonVotar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButtonVotar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonVotar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonVotarActionPerformed(evt);
             }
         });
 
-        jTituloVotacao.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jTituloVotacao.setFont(new java.awt.Font("Thonburi", 1, 24)); // NOI18N
         jTituloVotacao.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout jPanelVotacoesLayout = new javax.swing.GroupLayout(jPanelVotacoes);
@@ -324,9 +332,9 @@ public final class SEGUI extends javax.swing.JFrame {
             .addGroup(jPanelVotacoesLayout.createSequentialGroup()
                 .addGap(88, 88, 88)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(112, 112, 112)
-                .addComponent(jButtonVotar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(157, Short.MAX_VALUE))
+                .addGap(82, 82, 82)
+                .addComponent(jButtonVotar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(170, Short.MAX_VALUE))
             .addComponent(jTituloVotacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanelVotacoesLayout.setVerticalGroup(
@@ -335,12 +343,10 @@ public final class SEGUI extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addComponent(jTituloVotacao, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37)
-                .addGroup(jPanelVotacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelVotacoesLayout.createSequentialGroup()
-                        .addGap(89, 89, 89)
-                        .addComponent(jButtonVotar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(122, Short.MAX_VALUE))
+                .addGroup(jPanelVotacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+                    .addComponent(jButtonVotar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(130, Short.MAX_VALUE))
         );
 
         menuTabs.addTab("Votação", jPanelVotacoes);
@@ -356,7 +362,7 @@ public final class SEGUI extends javax.swing.JFrame {
         votacoesTextArea.setRows(5);
         jScrollPane2.setViewportView(votacoesTextArea);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tamil Sangam MN", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Candidatos");
 
@@ -372,21 +378,22 @@ public final class SEGUI extends javax.swing.JFrame {
             jPanelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelResultadosLayout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(jPanelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(comboBoxEleicoes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE))
                 .addGroup(jPanelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelResultadosLayout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(63, 63, 63)
+                        .addComponent(txtTituloEleicao)
+                        .addContainerGap(298, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelResultadosLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanelResultadosLayout.createSequentialGroup()
-                                .addGap(34, 34, 34)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanelResultadosLayout.createSequentialGroup()
-                                .addGap(80, 80, 80)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanelResultadosLayout.createSequentialGroup()
-                        .addComponent(comboBoxEleicoes, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(171, 171, 171)
-                        .addComponent(txtTituloEleicao)))
-                .addContainerGap(55, Short.MAX_VALUE))
+                                .addGap(12, 12, 12)
+                                .addComponent(jScrollPane3)
+                                .addContainerGap())
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
         jPanelResultadosLayout.setVerticalGroup(
             jPanelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -397,13 +404,11 @@ public final class SEGUI extends javax.swing.JFrame {
                     .addComponent(txtTituloEleicao))
                 .addGap(31, 31, 31)
                 .addGroup(jPanelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
                     .addGroup(jPanelResultadosLayout.createSequentialGroup()
-                        .addGap(47, 47, 47)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 146, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3)))
                 .addContainerGap())
         );
 
@@ -466,7 +471,7 @@ public final class SEGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelMinerarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelMinerarLayout.createSequentialGroup()
-                        .addGap(0, 28, Short.MAX_VALUE)
+                        .addGap(0, 45, Short.MAX_VALUE)
                         .addGroup(jPanelMinerarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelMinerarLayout.createSequentialGroup()
                                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -493,7 +498,7 @@ public final class SEGUI extends javax.swing.JFrame {
             .addGroup(jPanelMinerarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
                 .addComponent(jTextFieldNonce, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
                 .addComponent(jTextFieldHash, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -509,11 +514,13 @@ public final class SEGUI extends javax.swing.JFrame {
             }
         });
 
-        jLabelAdminElei.setText("Nome Elei.");
+        jLabelAdminElei.setText("Nome Eleição");
 
         jLabelAdminCandidatos.setText("Candidatos");
 
-        jButtonAdicionarCandidato.setText("+");
+        jButtonAdicionarCandidato.setIcon(new javax.swing.ImageIcon("/Users/sw4rtz/Library/CloudStorage/OneDrive-InstitutoPolitécnicodeTomar/01_Escola/2_Licenciatura/3_Ano/Computação Distribuida/TP Comp. Distribuida/SistemaEleitoral/src/SEGUI/assets/addCandidato.png")); // NOI18N
+        jButtonAdicionarCandidato.setBorder(null);
+        jButtonAdicionarCandidato.setContentAreaFilled(false);
         jButtonAdicionarCandidato.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAdicionarCandidatoActionPerformed(evt);
@@ -543,11 +550,11 @@ public final class SEGUI extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jTextFieldAdminCandidatos, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonAdicionarCandidato))
+                        .addComponent(jButtonAdicionarCandidato, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(45, 45, 45)
                         .addComponent(jButtonAdicionarEleicao)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(55, 55, 55))
         );
@@ -555,21 +562,23 @@ public final class SEGUI extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(47, 47, 47)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelAdminElei)
-                    .addComponent(jTextFieldAdminElei, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
-                .addComponent(jButtonAdicionarEleicao, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelAdminCandidatos)
-                    .addComponent(jTextFieldAdminCandidatos, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonAdicionarCandidato))
-                .addGap(47, 47, 47))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelAdminElei)
+                            .addComponent(jTextFieldAdminElei, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(9, 9, 9)
+                        .addComponent(jButtonAdicionarEleicao, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabelAdminCandidatos)
+                                .addComponent(jTextFieldAdminCandidatos, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jButtonAdicionarCandidato, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(53, 53, 53))))
         );
 
         jButtonMerkleTree.setText("Criar Merkle Tree");
@@ -666,6 +675,21 @@ public final class SEGUI extends javax.swing.JFrame {
                         loggedIn = true;
                         //caixa de texto que confirma que o login foi bem sucedido
                         txtAlert.setText("Successfully logged in!");
+                        
+                        //Se a aba/tab votação estiver aberta remove-a
+                        int numTabs = menuTabs.getTabCount();
+                        if(menuTabs.getTitleAt(1).equals("Votação")){
+                            fechaAbaVotar();
+                            numTabs--;
+                        }
+                        //Se campo email contiver a palavra admin são criadas duas abas/tabs adicionais "Minerar" e "Admin", se não apaga
+                        if(email.equals("admin")){
+                            menuTabs.add(jPanelMinerar, "Minerar", numTabs);
+                            menuTabs.add(jPanelAdmin, "Admin", numTabs+1);
+                        } else if(menuTabs.getTitleAt(numTabs-1).equals("Admin")) {
+                            menuTabs.remove(numTabs-1);
+                            menuTabs.remove(numTabs-2);
+                        }
                         //limpa os dados das caixas de texto
                         txtFieldNome.setText("");
                         txtFieldEmail.setText("");
