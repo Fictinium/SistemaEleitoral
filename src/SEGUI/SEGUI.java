@@ -989,10 +989,10 @@ public class SEGUI extends javax.swing.JFrame {
                             jTextFieldHash.setText("");
                             jButtonMinerar.setText("Stop");
                         });
-                        int nonce = miner.mine(tree.getRoot().toString(), (int) jSpinnerZeros.getValue());
+                        int nonce = miner.mine(Arrays.toString(tree.getRoot()), (int) jSpinnerZeros.getValue());
                         SwingUtilities.invokeLater(() -> {
                             jTextFieldNonce.setText(nonce + "");
-                            jTextFieldHash.setText(Miner.getHash(tree.getRoot().toString(), nonce));
+                            jTextFieldHash.setText(Miner.getHash(Arrays.toString(tree.getRoot()), nonce));
                             jButtonMinerar.setText("Start");
                         });
                     } catch (Exception ex) {
