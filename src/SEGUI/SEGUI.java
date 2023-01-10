@@ -189,10 +189,10 @@ public final class SEGUI extends javax.swing.JFrame {
         jLabelAdminCandidatos = new javax.swing.JLabel();
         jTextFieldAdminElei = new javax.swing.JTextField();
         jTextFieldAdminCandidatos = new javax.swing.JTextField();
-        jButtonAdicionarCandidato = new javax.swing.JButton();
         jScrollPane8 = new javax.swing.JScrollPane();
         jTextAreaAdminCandidatos = new javax.swing.JTextArea();
         jLabelAdminElei1 = new javax.swing.JLabel();
+        jButtonAdicionarCandidato = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jButtonMerkleTree = new javax.swing.JButton();
         jTextFieldQuantidadeVotos = new javax.swing.JTextField();
@@ -390,7 +390,7 @@ public final class SEGUI extends javax.swing.JFrame {
         jSpinnerZeros.setBorder(javax.swing.BorderFactory.createTitledBorder("Zeros"));
 
         jTextPaneLogs.setBackground(new java.awt.Color(0, 0, 0));
-        jTextPaneLogs.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Logs", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
+        jTextPaneLogs.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Logs", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(255, 255, 255))); // NOI18N
         jScrollPane6.setViewportView(jTextPaneLogs);
 
         jTextFieldNonce.setEditable(false);
@@ -474,21 +474,19 @@ public final class SEGUI extends javax.swing.JFrame {
 
         jLabelAdminCandidatos.setText("Candidatos");
 
-        jButtonAdicionarCandidato.setIcon(new javax.swing.ImageIcon("/Users/sw4rtz/Library/CloudStorage/OneDrive-InstitutoPolitécnicodeTomar/01_Escola/2_Licenciatura/3_Ano/Computação Distribuida/TP Comp. Distribuida/SistemaEleitoral/src/SEGUI/assets/addCandidato.png")); // NOI18N
-        jButtonAdicionarCandidato.setBorder(null);
-        jButtonAdicionarCandidato.setContentAreaFilled(false);
-        jButtonAdicionarCandidato.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAdicionarCandidatoActionPerformed(evt);
-            }
-        });
-
         jTextAreaAdminCandidatos.setEditable(false);
         jTextAreaAdminCandidatos.setColumns(5);
         jTextAreaAdminCandidatos.setRows(3);
         jScrollPane8.setViewportView(jTextAreaAdminCandidatos);
 
         jLabelAdminElei1.setText("Candidatos Adicionados");
+
+        jButtonAdicionarCandidato.setText("+");
+        jButtonAdicionarCandidato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAdicionarCandidatoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -508,9 +506,9 @@ public final class SEGUI extends javax.swing.JFrame {
                         .addComponent(jLabelAdminElei)
                         .addGap(18, 18, 18)
                         .addComponent(jTextFieldAdminElei, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonAdicionarCandidato, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonAdicionarCandidato)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabelAdminElei1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane8))
@@ -524,9 +522,6 @@ public final class SEGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonAdicionarCandidato))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabelAdminElei)
@@ -535,7 +530,8 @@ public final class SEGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelAdminCandidatos)
-                            .addComponent(jTextFieldAdminCandidatos, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jTextFieldAdminCandidatos, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonAdicionarCandidato)))
                     .addComponent(jScrollPane8))
                 .addGap(61, 61, 61))
         );
@@ -867,13 +863,6 @@ public final class SEGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonAdicionarEleicaoActionPerformed
 
-    //Adiciona um candidato à eleição
-    private void jButtonAdicionarCandidatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarCandidatoActionPerformed
-        String candidato = jTextFieldAdminCandidatos.getText();
-        jTextAreaAdminCandidatos.append(candidato + "\n");
-        jTextFieldAdminCandidatos.setText(null);
-    }//GEN-LAST:event_jButtonAdicionarCandidatoActionPerformed
-
     //Merkle Tree
     private void jButtonMerkleTreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMerkleTreeActionPerformed
         MerkleTree newTree = new MerkleTree(votosStack);
@@ -932,6 +921,12 @@ public final class SEGUI extends javax.swing.JFrame {
             votacao = false;
             menuTabs.setSelectedIndex(0);
     }//GEN-LAST:event_jListEleicoesMouseClicked
+
+    private void jButtonAdicionarCandidatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarCandidatoActionPerformed
+        String candidato = jTextFieldAdminCandidatos.getText();
+        jTextAreaAdminCandidatos.append(candidato + "\n");
+        jTextFieldAdminCandidatos.setText(null);
+    }//GEN-LAST:event_jButtonAdicionarCandidatoActionPerformed
 
     public void onException(String title, Exception ex) {
         GuiUtils.insertText(jTextPaneLogs, title, ex.getMessage(), Color.RED, Color.MAGENTA);
