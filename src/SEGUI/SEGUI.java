@@ -5,22 +5,10 @@
  */
 package SEGUI;
 
-import SECode.Eleicao;
-import SECode.Eleitor;
-import SECode.Candidato;
 import SECode.Candidato;
 import SECode.Eleicao;
 import SECode.Eleitor;
-
-import static SECode.SecurityConsole.createAssimKeys;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -30,7 +18,6 @@ import javax.swing.JRadioButton;
 
 import static SECode.SecurityConsole.createAssimKeys;
 import SECode.Voto;
-import blockChain.miner.Miner;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -40,41 +27,28 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
 import security.integrity.Integrity;
 import utils.SecurityUtils;
-import utils.SecurityUtils;
-
-import blockChain.chain.Block;
 import blockChain.miner.Miner;
 import java.awt.Color;
-import java.rmi.RemoteException;
 import javax.swing.SwingUtilities;
 import myUtils.GuiUtils;
 import myUtils.RMI;
-import blockChain.p2p.miner.ObjectRemoteMiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import blockChain.p2p.miner.InterfaceRemoteMiner;
-import blockChain.p2p.miner.ListenerRemoteMiner;
-import java.io.FileOutputStream;
-import java.util.List;
 import java.util.Scanner;
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
 import myUtils.MerkleTree;
-import static myUtils.MerkleTree.getHashValue;
-import static myUtils.MerkleTree.objectToBytes;
 
 /**
  *
  * @author Utilizador
  */
-public class SEGUI extends javax.swing.JFrame {
+public final class SEGUI extends javax.swing.JFrame {
 
     /**
      * Creates new form SEGUI
@@ -82,7 +56,6 @@ public class SEGUI extends javax.swing.JFrame {
     public SEGUI() {
         initComponents();
         addLista();
-        addToArrayCandidatos();
         atualizarEleicoesComboBox();
         menuTabs.remove(1);
     }
@@ -133,15 +106,6 @@ public class SEGUI extends javax.swing.JFrame {
         listaEleicoes.add(default1);
         listaEleicoes.add(default2);
         listaEleicoes.add(default3);
-    }
-    
-    //TESTE: Adiciona dois elementos às ao ArrayList<Candidatos>
-    public void addToArrayCandidatos(){
-        Candidato candidato1 = new Candidato("Candidato 1");
-        Candidato candidato2 = new Candidato("Candidato 2");
- 
-        candidatos.add(candidato1);
-        candidatos.add(candidato2);
     }
     
     //TESTE: Adiciona as eleições à lista dropdown dos resultados
@@ -352,7 +316,7 @@ public class SEGUI extends javax.swing.JFrame {
                         .addGap(23, 23, 23))))
         );
 
-        menuTabs.addTab("Lista de Eleiçõoes", jPanelEleicoes);
+        menuTabs.addTab("Lista de Eleições", jPanelEleicoes);
 
         jScrollPane5.setViewportView(jListVotacao);
 
@@ -473,7 +437,7 @@ public class SEGUI extends javax.swing.JFrame {
         jSpinnerZeros.setBorder(javax.swing.BorderFactory.createTitledBorder("Zeros"));
 
         jTextPaneLogs.setBackground(new java.awt.Color(0, 0, 0));
-        jTextPaneLogs.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Logs", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
+        jTextPaneLogs.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Logs", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
         jScrollPane6.setViewportView(jTextPaneLogs);
 
         jTextFieldNonce.setEditable(false);
@@ -912,16 +876,9 @@ public class SEGUI extends javax.swing.JFrame {
     }
     
     public void fechaAbaVotar(){
-        Component selected = menuTabs.getSelectedComponent();
-        int tabCount = menuTabs.getTabCount(), i;
-        // Procura index da Tab/aba com o nome "Votar" e fecha-a
-        for (i=0; i < tabCount; i++) {
-          String tabTitle = menuTabs.getTitleAt(i);
-          if(tabTitle.equals("Votar")){
-            menuTabs.remove(i);
-            votacao = false;
-          };
-        }
+        // Fecha a aba 1 que quando esta função é executada corresponde sempre ao index da aba "Votação"
+        menuTabs.remove(1);
+        votacao = false;
         menuTabs.setSelectedIndex(0);
     }//GEN-LAST:event_jListEleicoesMouseClicked
 
@@ -988,7 +945,7 @@ public class SEGUI extends javax.swing.JFrame {
                             jTextFieldNonce.setText("");
                             jTextFieldHash.setText("");
                             jButtonMinerar.setText("Stop");
-                        });
+                        }); 
                         int nonce = miner.mine(Arrays.toString(tree.getRoot()), (int) jSpinnerZeros.getValue());
                         SwingUtilities.invokeLater(() -> {
                             jTextFieldNonce.setText(nonce + "");
@@ -996,7 +953,7 @@ public class SEGUI extends javax.swing.JFrame {
                             jButtonMinerar.setText("Start");
                         });
                     } catch (Exception ex) {
-                        onException("Mining", ex);
+                        onException("Mining 2", ex);
                     }
                 }).start();
             }
@@ -1013,19 +970,23 @@ public class SEGUI extends javax.swing.JFrame {
         if(jListVotacao.isSelectionEmpty()){
             JOptionPane.showMessageDialog(null, "Selecione um candidato primeiro", "Aviso!",JOptionPane.WARNING_MESSAGE);
         }else{
-            for(Candidato candidato: candidatos){
+            for(Candidato candidato : eleicaoSelecionada.getListaCandidatos()){
+                System.out.println(candidato.getNome());
+                System.out.println(jListVotacao.getSelectedValue());
                 if(candidato.getNome().equals(jListVotacao.getSelectedValue())){
                     Voto voto = new Voto(loggedEleitor, candidato);
                     votosStack.add(voto);
                     loggedEleitor.addVotacao(candidato);
                     eleicaoSelecionada.addEleitor(loggedEleitor);
                     voteCounter++;
+                    System.out.println(voteCounter);
                     jTextFieldQuantidadeVotos.setText(voteCounter + "");
                     break;
                 }
             }
             JOptionPane.showMessageDialog(null, "Votação completa", "Informação",JOptionPane.WARNING_MESSAGE);
-            menuTabs.remove(1);
+            fechaAbaVotar();
+
         }
     }//GEN-LAST:event_jButtonVotarActionPerformed
 
