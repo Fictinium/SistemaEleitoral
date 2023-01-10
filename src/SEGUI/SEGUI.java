@@ -9,26 +9,17 @@ import SECode.Candidato;
 import SECode.Eleicao;
 import SECode.Eleitor;
 import java.util.ArrayList;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-
 import static SECode.SecurityConsole.createAssimKeys;
 import SECode.Voto;
-import java.awt.Font;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
 import security.integrity.Integrity;
 import utils.SecurityUtils;
 import blockChain.miner.Miner;
@@ -888,16 +879,14 @@ public final class SEGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonMinerarActionPerformed
 
-    //Permite validar uma votação, esta é guardada em "votosStack"
+    //Permite validar um voto, esta é guardada em "votosStack"
     private void jButtonVotarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVotarActionPerformed
         if(jListVotacao.isSelectionEmpty()){
             JOptionPane.showMessageDialog(null, "Selecione um candidato primeiro", "Aviso!",JOptionPane.WARNING_MESSAGE);
         }else{
             for(Candidato candidato : eleicaoSelecionada.getListaCandidatos()){
-                System.out.println(candidato.getNome());
-                System.out.println(jListVotacao.getSelectedValue());
                 if(candidato.getNome().equals(jListVotacao.getSelectedValue())){
-                    Voto voto = new Voto(loggedEleitor, candidato);
+                    Voto voto = new Voto(loggedEleitor, candidato, eleicaoSelecionada);
                     votosStack.add(voto);
                     loggedEleitor.addVotacao(candidato);
                     eleicaoSelecionada.addEleitor(loggedEleitor);
@@ -912,6 +901,7 @@ public final class SEGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonVotarActionPerformed
 
+    //Valida e cria uma eleição
     private void jButtonAdicionarEleicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarEleicaoActionPerformed
         if(jTextFieldAdminElei.getText().isBlank()){
             JOptionPane.showMessageDialog(null, "Falta preencher o nome da eleição", "Aviso!",JOptionPane.WARNING_MESSAGE);
@@ -941,14 +931,20 @@ public final class SEGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonAdicionarEleicaoActionPerformed
 
+    //Adiciona um candidato à eleição
     private void jButtonAdicionarCandidatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarCandidatoActionPerformed
         String candidato = jTextFieldAdminCandidatos.getText();
         jTextAreaAdminCandidatos.append(candidato + "\n");
         jTextFieldAdminCandidatos.setText(null);
     }//GEN-LAST:event_jButtonAdicionarCandidatoActionPerformed
 
+    //Merkle Tree
     private void jButtonMerkleTreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMerkleTreeActionPerformed
         MerkleTree newTree = new MerkleTree(votosStack);
+        for(Voto voto : votosStack) {
+            //Imprime na consola a Eleição o Eleitor e o voto que este particou
+            System.out.println("Eleição: " + voto.getEleicao().getNome() + "\nEleitor: " + voto.getEleitor().getNome() + ", Candidato: " + voto.getCandidato().getNome());
+        }
         tree = newTree;
     }//GEN-LAST:event_jButtonMerkleTreeActionPerformed
 

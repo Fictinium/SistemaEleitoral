@@ -13,9 +13,25 @@ public class Voto {
     
     private Eleitor eleitor;
     private Candidato candidato;
-    
-    public Voto(Eleitor eleitor, Candidato candidato){
+    private Eleicao eleicao;
+
+    public Voto(Eleitor eleitor, Candidato candidato, Eleicao eleicao) {
         this.eleitor = eleitor;
         this.candidato = candidato;
+        this.eleicao = eleicao;
     }
+
+   
+    public Eleitor getEleitor(){
+        return this.eleitor;
+    }
+    
+    public Candidato getCandidato(){
+        return this.candidato;
+    }
+    
+    public Eleicao getEleicao() {
+        return eleicao;
+    }
+   
 }
