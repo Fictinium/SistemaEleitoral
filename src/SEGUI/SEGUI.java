@@ -477,6 +477,7 @@ public final class SEGUI extends javax.swing.JFrame {
         jButtonAdicionarCandidato.setIcon(new javax.swing.ImageIcon("/Users/sw4rtz/Library/CloudStorage/OneDrive-InstitutoPolitécnicodeTomar/01_Escola/2_Licenciatura/3_Ano/Computação Distribuida/TP Comp. Distribuida/SistemaEleitoral/src/SEGUI/assets/addCandidato.png")); // NOI18N
         jButtonAdicionarCandidato.setBorder(null);
         jButtonAdicionarCandidato.setContentAreaFilled(false);
+        jButtonAdicionarCandidato.setMixingCutoutShape(null);
         jButtonAdicionarCandidato.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAdicionarCandidatoActionPerformed(evt);
