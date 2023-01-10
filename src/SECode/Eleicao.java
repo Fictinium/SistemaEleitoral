@@ -20,11 +20,11 @@ public class Eleicao {
     private ArrayList<Candidato> candidatos;
     private ArrayList<Eleitor> eleitores;
     
-    public Eleicao(String nome, Date dataInicio, Date dataFim){
+    public Eleicao(String nome, Date dataInicio, Date dataFim, ArrayList<Candidato> candidatos){
         this.nome = nome;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
-        this.candidatos = new ArrayList<Candidato>();
+        this.candidatos = candidatos;
         this.eleitores = new ArrayList<Eleitor>();
     }
     

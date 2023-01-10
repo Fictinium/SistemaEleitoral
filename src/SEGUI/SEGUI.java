@@ -79,7 +79,7 @@ public class SEGUI extends javax.swing.JFrame {
         initComponents();
         addLista();
         addToArrayCandidatos();
-        addToComboBox();
+        atualizarEleicoesComboBox();
         menuTabs.remove(1);
     }
     
@@ -112,13 +112,13 @@ public class SEGUI extends javax.swing.JFrame {
     
     //TESTE: Adiciona três elementos às ao ArrayList<Eleicao>
     public void addToArraylistaEleicoes(){
-        Eleicao default1 = new Eleicao("Associação de Estudantes", null, null);
+        Eleicao default1 = new Eleicao("Associação de Estudantes", null, null, new ArrayList<Candidato>());
         default1.addCandidato(new Candidato("Zé"));
         default1.addCandidato(new Candidato("Maria"));
-        Eleicao default2 = new Eleicao("Nucleo de Estudantes", null, null);
+        Eleicao default2 = new Eleicao("Nucleo de Estudantes", null, null, new ArrayList<Candidato>());
         default2.addCandidato(new Candidato("Gertrudes"));
         default2.addCandidato(new Candidato("Diana"));
-        Eleicao default3 = new Eleicao("Presidencia", null, null);
+        Eleicao default3 = new Eleicao("Presidencia", null, null, new ArrayList<Candidato>());
         default3.addCandidato(new Candidato("Laura"));
         default3.addCandidato(new Candidato("Diogo"));
  
@@ -137,7 +137,8 @@ public class SEGUI extends javax.swing.JFrame {
     }
     
     //TESTE: Adiciona as eleições à lista dropdown dos resultados
-    public void addToComboBox(){
+    public void atualizarEleicoesComboBox(){
+        comboBoxEleicoes.removeAllItems();
         for(Eleicao eleicao: listaEleicoes){
             comboBoxEleicoes.addItem(eleicao.getNome());
         }
@@ -214,6 +215,16 @@ public class SEGUI extends javax.swing.JFrame {
         jTextFieldHash = new javax.swing.JTextField();
         jScrollPane7 = new javax.swing.JScrollPane();
         jTextAreaMensagem = new javax.swing.JTextArea();
+        jPanelAdmin = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jButtonAdicionarEleicao = new javax.swing.JButton();
+        jLabelAdminElei = new javax.swing.JLabel();
+        jLabelAdminCandidatos = new javax.swing.JLabel();
+        jTextFieldAdminElei = new javax.swing.JTextField();
+        jTextFieldAdminCandidatos = new javax.swing.JTextField();
+        jButtonAdicionarCandidato = new javax.swing.JButton();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        jTextAreaAdminCandidatos = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -389,7 +400,7 @@ public class SEGUI extends javax.swing.JFrame {
         jLabel1.setText("Candidatos");
 
         candidatosTextArea.setEditable(false);
-        candidatosTextArea.setColumns(20);
+        candidatosTextArea.setColumns(10);
         candidatosTextArea.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         candidatosTextArea.setRows(5);
         jScrollPane3.setViewportView(candidatosTextArea);
@@ -408,8 +419,8 @@ public class SEGUI extends javax.swing.JFrame {
                                 .addGap(34, 34, 34)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanelResultadosLayout.createSequentialGroup()
-                                .addGap(44, 44, 44)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(80, 80, 80)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanelResultadosLayout.createSequentialGroup()
                         .addComponent(comboBoxEleicoes, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(171, 171, 171)
@@ -430,8 +441,8 @@ public class SEGUI extends javax.swing.JFrame {
                         .addGap(47, 47, 47)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 142, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 146, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -534,6 +545,95 @@ public class SEGUI extends javax.swing.JFrame {
         );
 
         menuTabs.addTab("Minerar", jPanelMinerar);
+
+        jButtonAdicionarEleicao.setText("Adicionar Eleição");
+        jButtonAdicionarEleicao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAdicionarEleicaoActionPerformed(evt);
+            }
+        });
+
+        jLabelAdminElei.setText("Nome Elei.");
+
+        jLabelAdminCandidatos.setText("Candidatos");
+
+        jButtonAdicionarCandidato.setText("+");
+        jButtonAdicionarCandidato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAdicionarCandidatoActionPerformed(evt);
+            }
+        });
+
+        jTextAreaAdminCandidatos.setEditable(false);
+        jTextAreaAdminCandidatos.setColumns(5);
+        jTextAreaAdminCandidatos.setRows(3);
+        jScrollPane8.setViewportView(jTextAreaAdminCandidatos);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(194, 194, 194)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabelAdminElei)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldAdminElei, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabelAdminCandidatos)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldAdminCandidatos, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonAdicionarCandidato))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addComponent(jButtonAdicionarEleicao)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(55, 55, 55))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelAdminElei)
+                    .addComponent(jTextFieldAdminElei, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addComponent(jButtonAdicionarEleicao, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelAdminCandidatos)
+                    .addComponent(jTextFieldAdminCandidatos, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonAdicionarCandidato))
+                .addGap(47, 47, 47))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
+        );
+
+        javax.swing.GroupLayout jPanelAdminLayout = new javax.swing.GroupLayout(jPanelAdmin);
+        jPanelAdmin.setLayout(jPanelAdminLayout);
+        jPanelAdminLayout.setHorizontalGroup(
+            jPanelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelAdminLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanelAdminLayout.setVerticalGroup(
+            jPanelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelAdminLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(226, Short.MAX_VALUE))
+        );
+
+        menuTabs.addTab("Admin", jPanelAdmin);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -895,6 +995,41 @@ public class SEGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonVotarActionPerformed
 
+    private void jButtonAdicionarEleicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarEleicaoActionPerformed
+        if(jTextFieldAdminElei.getText().isBlank()){
+            JOptionPane.showMessageDialog(null, "Falta preencher o nome da eleição", "Aviso!",JOptionPane.WARNING_MESSAGE);
+        }else{
+            if(jTextAreaAdminCandidatos.getText().isBlank()){
+                JOptionPane.showMessageDialog(null, "Falta adicionar os candidatos", "Aviso!",JOptionPane.WARNING_MESSAGE);
+            }else{
+                String[] listaTextoCandidatos = jTextAreaAdminCandidatos.getText().split("\\s");
+                if(jTextAreaAdminCandidatos.getText().strip().length() <= listaTextoCandidatos[0].length()){
+                    JOptionPane.showMessageDialog(null, "Sem candidatos suficientes", "Aviso!",JOptionPane.WARNING_MESSAGE);
+                }else{
+                    String nomeElei = jTextFieldAdminElei.getText();
+                    ArrayList<Candidato> listacandidatos = new ArrayList();
+                    for(String candidato: listaTextoCandidatos){
+                        listacandidatos.add(new Candidato(candidato));
+                    }
+                    Eleicao eleicao = new Eleicao(nomeElei, null, null, listacandidatos);
+                    listaEleicoes.add(eleicao);
+                    atualizarListaEleicoes(jListEleicoes, listaEleicoes);
+                    atualizarEleicoesComboBox();
+                    jTextFieldAdminElei.setText(null);
+                    jTextFieldAdminCandidatos.setText(null);
+                    jTextAreaAdminCandidatos.setText(null);
+                    JOptionPane.showMessageDialog(null, "Eleição criada", "Informação",JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        }
+    }//GEN-LAST:event_jButtonAdicionarEleicaoActionPerformed
+
+    private void jButtonAdicionarCandidatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarCandidatoActionPerformed
+        String candidato = jTextFieldAdminCandidatos.getText();
+        jTextAreaAdminCandidatos.append(candidato + "\n");
+        jTextFieldAdminCandidatos.setText(null);
+    }//GEN-LAST:event_jButtonAdicionarCandidatoActionPerformed
+
     public void onException(String title, Exception ex) {
         GuiUtils.insertText(jTextPaneLogs, title, ex.getMessage(), Color.RED, Color.MAGENTA);
     }
@@ -940,12 +1075,18 @@ public class SEGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnRegistar;
     private javax.swing.JTextArea candidatosTextArea;
     private javax.swing.JComboBox<String> comboBoxEleicoes;
+    private javax.swing.JButton jButtonAdicionarCandidato;
+    private javax.swing.JButton jButtonAdicionarEleicao;
     private javax.swing.JButton jButtonConectar;
     private javax.swing.JButton jButtonMinerar;
     private javax.swing.JButton jButtonVotar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabelAdminCandidatos;
+    private javax.swing.JLabel jLabelAdminElei;
     private javax.swing.JList<String> jListEleicoes;
     private javax.swing.JList<String> jListVotacao;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanelAdmin;
     private javax.swing.JPanel jPanelEleicoes;
     private javax.swing.JPanel jPanelMinerar;
     private javax.swing.JPanel jPanelResultados;
@@ -957,8 +1098,12 @@ public class SEGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JSpinner jSpinnerZeros;
+    private javax.swing.JTextArea jTextAreaAdminCandidatos;
     private javax.swing.JTextArea jTextAreaMensagem;
+    private javax.swing.JTextField jTextFieldAdminCandidatos;
+    private javax.swing.JTextField jTextFieldAdminElei;
     private javax.swing.JTextField jTextFieldEnderecoServidor;
     private javax.swing.JTextField jTextFieldHash;
     private javax.swing.JTextField jTextFieldNonce;
