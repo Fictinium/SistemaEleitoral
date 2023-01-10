@@ -11,7 +11,6 @@ import SECode.Eleitor;
 import java.util.ArrayList;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import static SECode.SecurityConsole.createAssimKeys;
 import SECode.Voto;
 import java.io.IOException;
