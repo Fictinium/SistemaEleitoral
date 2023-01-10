@@ -18,7 +18,6 @@ import javax.swing.JRadioButton;
 
 import static SECode.SecurityConsole.createAssimKeys;
 import SECode.Voto;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -122,6 +121,7 @@ public final class SEGUI extends javax.swing.JFrame {
         atualizarListaEleicoes(jListEleicoes, listaEleicoes);
     }
 
+    //Atualiza a lista de eleições no "jListEleicoes)
     public void atualizarListaEleicoes(JList jList, ArrayList<Eleicao> arrayList){
         DefaultListModel listModel = new DefaultListModel();
         for(Eleicao i: arrayList){
@@ -131,6 +131,7 @@ public final class SEGUI extends javax.swing.JFrame {
         jList.setModel(listModel);
     }
     
+    //Atualiza a lista de candidatos
     public void atualizarListaCandidatosVoto(JList jList, ArrayList<Candidato> arrayList){
         DefaultListModel listModel = new DefaultListModel();
         for(Candidato i: arrayList){
@@ -168,6 +169,7 @@ public final class SEGUI extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         jListVotacao = new javax.swing.JList<>();
         jButtonVotar = new javax.swing.JButton();
+        jTituloVotacao = new javax.swing.JLabel();
         jPanelResultados = new javax.swing.JPanel();
         comboBoxEleicoes = new javax.swing.JComboBox<>();
         txtTituloEleicao = new javax.swing.JLabel();
@@ -215,12 +217,6 @@ public final class SEGUI extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(jListEleicoes);
-
-        txtFieldEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFieldEmailActionPerformed(evt);
-            }
-        });
 
         txtFieldPassword.setToolTipText("");
 
@@ -327,28 +323,33 @@ public final class SEGUI extends javax.swing.JFrame {
             }
         });
 
+        jTituloVotacao.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jTituloVotacao.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout jPanelVotacoesLayout = new javax.swing.GroupLayout(jPanelVotacoes);
         jPanelVotacoes.setLayout(jPanelVotacoesLayout);
         jPanelVotacoesLayout.setHorizontalGroup(
             jPanelVotacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelVotacoesLayout.createSequentialGroup()
-                .addGap(91, 91, 91)
+                .addGap(88, 88, 88)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(112, 112, 112)
                 .addComponent(jButtonVotar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(141, Short.MAX_VALUE))
+                .addContainerGap(157, Short.MAX_VALUE))
+            .addComponent(jTituloVotacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanelVotacoesLayout.setVerticalGroup(
             jPanelVotacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelVotacoesLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(jTituloVotacao, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
                 .addGroup(jPanelVotacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelVotacoesLayout.createSequentialGroup()
-                        .addGap(173, 173, 173)
+                        .addGap(89, 89, 89)
                         .addComponent(jButtonVotar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanelVotacoesLayout.createSequentialGroup()
-                        .addGap(84, 84, 84)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(132, Short.MAX_VALUE))
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(122, Short.MAX_VALUE))
         );
 
         menuTabs.addTab("Votação", jPanelVotacoes);
@@ -689,18 +690,14 @@ public final class SEGUI extends javax.swing.JFrame {
         }
     }                                         
 
-    //função para limpar os espaços de texto
+    //Limpa os textBoxs do formulário de autenticação
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         txtFieldNome.setText("");
         txtFieldEmail.setText("");
         txtFieldPassword.setText("");
     }//GEN-LAST:event_btnLimparActionPerformed
-
-    private void txtFieldEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldEmailActionPerformed
     
-    //função para registar um novo utilizador
+    //Regista um novo utilizador através do preenchimento do Nome, Email e Password no formulário de autenticação
     private void btnRegistarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistarActionPerformed
         try {
             //if statement para verificar se alguma caixa de texto foi deixada em branco
@@ -740,11 +737,6 @@ public final class SEGUI extends javax.swing.JFrame {
                     createAssimKeys(eleitor);
                     //adição do utilizador à BD
                     eleitores.add(eleitor);
-                    //ficheiro para registar os dados inseridos
-                    /*FileOutputStream fos = new FileOutputStream(email, true);
-                    byte[] infoBytes = (nome + email + password).getBytes();
-                    fos.write(infoBytes);
-                    fos.close();*/
                     //caixa de texto que confirma que o registo foi bem sucedido
                     txtAlert.setText("Account successfully registered!");
                     //limpa os dados das caixas de texto
@@ -776,69 +768,16 @@ public final class SEGUI extends javax.swing.JFrame {
             }
         }else if(loggedIn){
             votacao = true;
-            // Recebe texto do elemento escolhido na lista
+            // Recebe o elemento escolhido na lista
             JList target = (JList)evt.getSource();
             int index = target.locationToIndex(evt.getPoint());
             Object item = target.getModel().getElementAt(index);
             
             //Imprime na consola o item selecionado da listaEleicoes
             System.out.println(item.toString());
-
-            JPanel panel = new JPanel();
-            JPanel panelRadioButtons = new JPanel();
-            JPanel panelButtons = new JPanel();
-            JLabel nomeEleicao = new JLabel();
-            JPanel teste = new JPanel();
             
-            teste.setLayout(new GridBagLayout());
-
-            
-            //Centra todo o conteudo do JPanel principal
-            panel.setLayout(new GridBagLayout());
-            panel.add(panelRadioButtons);
-            //Coloca os elementos jRadioButtons criados na vertical
-            panelRadioButtons.setLayout(new BoxLayout(panelRadioButtons, BoxLayout.Y_AXIS));
-            
-            nomeEleicao.setText(item.toString());
-            
-            Font font=new Font("ARIAL",Font.CENTER_BASELINE,20);
-            nomeEleicao.setFont(font);
-            //nomeEleicao.setBounds(100,50,100,100);
-
-
-            teste.add(nomeEleicao);
-
-            // Cria botão votar e botão cancelar
-            JButton btn = new JButton("Votar");
-            JButton btnCancelar = new JButton("Cancelar");
-            grupo = new ButtonGroup();
-
-            // Adiciona RadioButtons ao grupo e ao JPanel com o nome de todos os candidatos na ArrayList Candidatos
-            for (int i = 0; i < candidatos.size(); i++){
-                addRadioOption(panelRadioButtons,grupo,candidatos.get(i).getNome());
-            }
-
-            // Adiciona evento ao clicar no botão "btn" e adiciona-o ao JPanel
-            btn.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(ActionEvent e) {btnVotarActionPerformed(e);}
-            });
-
-            // Botão cancelar, apaga tudo e fecha a Tab
-            btnCancelar.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(ActionEvent e){
-                    panel.removeAll();
-                    grupo.clearSelection();
-                    fechaAbaVotar();
-                }
-            });
-
-            panelButtons.add(btn);
-            panelButtons.add(btnCancelar);
-            panelRadioButtons.add(panelButtons);
-            teste.add(panel);
-            
-            // Cria nova tab na interface do programa com o nome votar
-            //menuTabs.addTab("Votar", panel);
+            //Coloca o nome da eleição selecionada na label "jTituloVotacao"
+            jTituloVotacao.setText(item.toString());
             
             for(Eleicao eleicao: listaEleicoes){
                 if(eleicao.getNome().equals(jListEleicoes.getSelectedValue())){
@@ -846,35 +785,17 @@ public final class SEGUI extends javax.swing.JFrame {
                     break;
                 }
             }
+            
+            //Adiciona aba/tab de voto, atualiza a lista de candidatos e traz a interface para a aba voto
             menuTabs.add(jPanelVotacoes, "Votação", 1);
-            
             atualizarListaCandidatosVoto(jListVotacao, eleicaoSelecionada.getListaCandidatos());
-            
             menuTabs.setSelectedIndex(1);
         } else {
             JOptionPane.showMessageDialog(null, "Preencha os seus dados primeiro", "Aviso!",JOptionPane.WARNING_MESSAGE);
         }
     }                                         
     
-    // Adiciona RadioButtons a um grupo e ao JPanel
-    public void addRadioOption(JPanel p, ButtonGroup g, String t) {
-        JRadioButton b = new JRadioButton(t);
-        b.setActionCommand(t);
-        p.add(b);
-        g.add(b);
-    }
-
-    // Ação do botão votar, este adquire o texto do RadioButton selecionado e imprime-o no terminal
-    public void btnVotarActionPerformed(ActionEvent e) {
-        ButtonModel b = grupo.getSelection();
-        String t = "Voto em Branco";
-        if (b!=null){
-            t = b.getActionCommand();
-        }
-        System.out.println(t);
-        fechaAbaVotar();
-    }
-    
+    //Fecha aba/tab "Votação" e coloca o poco da interface na página inicial
     public void fechaAbaVotar(){
         // Fecha a aba 1 que quando esta função é executada corresponde sempre ao index da aba "Votação"
         menuTabs.remove(1);
@@ -882,6 +803,7 @@ public final class SEGUI extends javax.swing.JFrame {
         menuTabs.setSelectedIndex(0);
     }//GEN-LAST:event_jListEleicoesMouseClicked
 
+    //Permite selecionar uma eleição através de um comboBox (comboBoxEleicoes), quando a sua seleção é alterada os dados nas restantes listas também o são para corresponder
     private void comboBoxEleicoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxEleicoesActionPerformed
         candidatosTextArea.setText(null);
         votacoesTextArea.setText(null);
@@ -898,7 +820,7 @@ public final class SEGUI extends javax.swing.JFrame {
                 break;
             }
         }
-        //insere os noomes dos candidatos da eleição escolhida na caixa de texto "candidatosTextArea", para visualização
+        //insere os nomes dos candidatos da eleição escolhida na caixa de texto "candidatosTextArea", para visualização
         for(Candidato candidato: candidatosEleicao){
             candidatosTextArea.append(candidato.getNome() + "\n");
         }
@@ -953,7 +875,7 @@ public final class SEGUI extends javax.swing.JFrame {
                             jButtonMinerar.setText("Start");
                         });
                     } catch (Exception ex) {
-                        onException("Mining 2", ex);
+                        onException("Mining", ex);
                     }
                 }).start();
             }
@@ -966,6 +888,7 @@ public final class SEGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonMinerarActionPerformed
 
+    //Permite validar uma votação, esta é guardada em "votosStack"
     private void jButtonVotarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVotarActionPerformed
         if(jListVotacao.isSelectionEmpty()){
             JOptionPane.showMessageDialog(null, "Selecione um candidato primeiro", "Aviso!",JOptionPane.WARNING_MESSAGE);
@@ -986,7 +909,6 @@ public final class SEGUI extends javax.swing.JFrame {
             }
             JOptionPane.showMessageDialog(null, "Votação completa", "Informação",JOptionPane.WARNING_MESSAGE);
             fechaAbaVotar();
-
         }
     }//GEN-LAST:event_jButtonVotarActionPerformed
 
@@ -1111,6 +1033,7 @@ public final class SEGUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldNonce;
     private javax.swing.JTextField jTextFieldQuantidadeVotos;
     private javax.swing.JTextPane jTextPaneLogs;
+    private javax.swing.JLabel jTituloVotacao;
     private javax.swing.JTabbedPane menuTabs;
     private javax.swing.JTextPane txtAlert;
     private javax.swing.JLabel txtEmail;
