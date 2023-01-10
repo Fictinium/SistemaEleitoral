@@ -62,9 +62,13 @@ import java.util.logging.Logger;
 import blockChain.p2p.miner.InterfaceRemoteMiner;
 import blockChain.p2p.miner.ListenerRemoteMiner;
 import java.io.FileOutputStream;
+import java.util.List;
 import java.util.Scanner;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import myUtils.MerkleTree;
+import static myUtils.MerkleTree.getHashValue;
+import static myUtils.MerkleTree.objectToBytes;
 
 /**
  *
@@ -106,6 +110,10 @@ public class SEGUI extends javax.swing.JFrame {
     boolean votacao = false;
     //scanner para o sistema login
     Scanner scanner = new Scanner(System.in);
+    //contador de novos votos a adicionar a um bloco
+    int voteCounter = 0;
+    //merkle tree (para criar blocos)
+    MerkleTree tree = new MerkleTree();
     
     //objeto remoto (para minar)
     InterfaceRemoteMiner miner;
@@ -225,6 +233,9 @@ public class SEGUI extends javax.swing.JFrame {
         jButtonAdicionarCandidato = new javax.swing.JButton();
         jScrollPane8 = new javax.swing.JScrollPane();
         jTextAreaAdminCandidatos = new javax.swing.JTextArea();
+        jPanel1 = new javax.swing.JPanel();
+        jButtonMerkleTree = new javax.swing.JButton();
+        jTextFieldQuantidadeVotos = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -605,13 +616,47 @@ public class SEGUI extends javax.swing.JFrame {
                 .addGap(19, 19, 19))
         );
 
+        jButtonMerkleTree.setText("Criar Merkle Tree");
+        jButtonMerkleTree.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonMerkleTreeActionPerformed(evt);
+            }
+        });
+
+        jTextFieldQuantidadeVotos.setEditable(false);
+        jTextFieldQuantidadeVotos.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTextFieldQuantidadeVotos.setText("0");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(250, 250, 250)
+                .addComponent(jButtonMerkleTree, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jTextFieldQuantidadeVotos, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(75, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonMerkleTree, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldQuantidadeVotos, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(69, 69, 69))
+        );
+
         javax.swing.GroupLayout jPanelAdminLayout = new javax.swing.GroupLayout(jPanelAdmin);
         jPanelAdmin.setLayout(jPanelAdminLayout);
         jPanelAdminLayout.setHorizontalGroup(
             jPanelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelAdminLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelAdminLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanelAdminLayout.setVerticalGroup(
@@ -619,7 +664,9 @@ public class SEGUI extends javax.swing.JFrame {
             .addGroup(jPanelAdminLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(226, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         menuTabs.addTab("Admin", jPanelAdmin);
@@ -942,10 +989,10 @@ public class SEGUI extends javax.swing.JFrame {
                             jTextFieldHash.setText("");
                             jButtonMinerar.setText("Stop");
                         });
-                        int nonce = miner.mine(jTextAreaMensagem.getText(), (int) jSpinnerZeros.getValue());
+                        int nonce = miner.mine(tree.getRoot().toString(), (int) jSpinnerZeros.getValue());
                         SwingUtilities.invokeLater(() -> {
                             jTextFieldNonce.setText(nonce + "");
-                            jTextFieldHash.setText(Miner.getHash(jTextAreaMensagem.getText(), nonce));
+                            jTextFieldHash.setText(Miner.getHash(tree.getRoot().toString(), nonce));
                             jButtonMinerar.setText("Start");
                         });
                     } catch (Exception ex) {
@@ -953,6 +1000,10 @@ public class SEGUI extends javax.swing.JFrame {
                     }
                 }).start();
             }
+            ////////////////////
+            voteCounter = 0;
+            jTextFieldQuantidadeVotos.setText(voteCounter + "");
+            ////////////////////
         } catch (Exception ex) {
             onException("Mining", ex);
         }
@@ -968,6 +1019,8 @@ public class SEGUI extends javax.swing.JFrame {
                     votosStack.add(voto);
                     loggedEleitor.addVotacao(candidato);
                     eleicaoSelecionada.addEleitor(loggedEleitor);
+                    voteCounter++;
+                    jTextFieldQuantidadeVotos.setText(voteCounter + "");
                     break;
                 }
             }
@@ -1010,6 +1063,11 @@ public class SEGUI extends javax.swing.JFrame {
         jTextAreaAdminCandidatos.append(candidato + "\n");
         jTextFieldAdminCandidatos.setText(null);
     }//GEN-LAST:event_jButtonAdicionarCandidatoActionPerformed
+
+    private void jButtonMerkleTreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMerkleTreeActionPerformed
+        MerkleTree newTree = new MerkleTree(votosStack);
+        tree = newTree;
+    }//GEN-LAST:event_jButtonMerkleTreeActionPerformed
 
     public void onException(String title, Exception ex) {
         GuiUtils.insertText(jTextPaneLogs, title, ex.getMessage(), Color.RED, Color.MAGENTA);
@@ -1059,6 +1117,7 @@ public class SEGUI extends javax.swing.JFrame {
     private javax.swing.JButton jButtonAdicionarCandidato;
     private javax.swing.JButton jButtonAdicionarEleicao;
     private javax.swing.JButton jButtonConectar;
+    private javax.swing.JButton jButtonMerkleTree;
     private javax.swing.JButton jButtonMinerar;
     private javax.swing.JButton jButtonVotar;
     private javax.swing.JLabel jLabel1;
@@ -1066,6 +1125,7 @@ public class SEGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelAdminElei;
     private javax.swing.JList<String> jListEleicoes;
     private javax.swing.JList<String> jListVotacao;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelAdmin;
     private javax.swing.JPanel jPanelEleicoes;
@@ -1088,6 +1148,7 @@ public class SEGUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldEnderecoServidor;
     private javax.swing.JTextField jTextFieldHash;
     private javax.swing.JTextField jTextFieldNonce;
+    private javax.swing.JTextField jTextFieldQuantidadeVotos;
     private javax.swing.JTextPane jTextPaneLogs;
     private javax.swing.JTabbedPane menuTabs;
     private javax.swing.JTextPane txtAlert;
