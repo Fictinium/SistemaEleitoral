@@ -73,12 +73,10 @@ public final class SEGUI extends javax.swing.JFrame {
     // Variavel global grupo e boolean votação
     ButtonGroup grupo = null;
     boolean votacao = false;
-    //scanner para o sistema login
-    Scanner scanner = new Scanner(System.in);
     //contador de novos votos a adicionar a um bloco
     int voteCounter = 0;
     //merkle tree (para criar blocos)
-    MerkleTree tree = new MerkleTree();
+    MerkleTree tree = null;
     
     //objeto remoto (para minar)
     InterfaceRemoteMiner miner;
@@ -180,8 +178,6 @@ public final class SEGUI extends javax.swing.JFrame {
         jTextPaneLogs = new javax.swing.JTextPane();
         jTextFieldNonce = new javax.swing.JTextField();
         jTextFieldHash = new javax.swing.JTextField();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        jTextAreaMensagem = new javax.swing.JTextArea();
         jPanelAdmin = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jButtonAdicionarEleicao = new javax.swing.JButton();
@@ -198,6 +194,7 @@ public final class SEGUI extends javax.swing.JFrame {
         jTextFieldQuantidadeVotos = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         menuTabs.setToolTipText("");
 
@@ -268,7 +265,6 @@ public final class SEGUI extends javax.swing.JFrame {
         jScrollPane5.setViewportView(jListVotacao);
 
         jButtonVotar.setFont(new java.awt.Font("Dialog", 0, 17)); // NOI18N
-        jButtonVotar.setIcon(new javax.swing.ImageIcon("/Users/sw4rtz/Library/CloudStorage/OneDrive-InstitutoPolitécnicodeTomar/01_Escola/2_Licenciatura/3_Ano/Computação Distribuida/TP Comp. Distribuida/SistemaEleitoral/src/SEGUI/assets/votar.png")); // NOI18N
         jButtonVotar.setText("Votar");
         jButtonVotar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButtonVotar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -307,9 +303,9 @@ public final class SEGUI extends javax.swing.JFrame {
 
         menuTabs.addTab("Votação", jPanelVotacoes);
 
-        comboBoxEleicoes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBoxEleicoesActionPerformed(evt);
+        comboBoxEleicoes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                comboBoxEleicoesMouseReleased(evt);
             }
         });
 
@@ -343,7 +339,7 @@ public final class SEGUI extends javax.swing.JFrame {
                         .addComponent(txtTituloEleicao)
                         .addContainerGap(309, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelResultadosLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
                         .addGroup(jPanelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanelResultadosLayout.createSequentialGroup()
                                 .addGap(12, 12, 12)
@@ -364,7 +360,7 @@ public final class SEGUI extends javax.swing.JFrame {
                     .addGroup(jPanelResultadosLayout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3)))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -389,8 +385,9 @@ public final class SEGUI extends javax.swing.JFrame {
 
         jSpinnerZeros.setBorder(javax.swing.BorderFactory.createTitledBorder("Zeros"));
 
+        jTextPaneLogs.setEditable(false);
         jTextPaneLogs.setBackground(new java.awt.Color(0, 0, 0));
-        jTextPaneLogs.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Logs", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(255, 255, 255))); // NOI18N
+        jTextPaneLogs.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Logs", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
         jScrollPane6.setViewportView(jTextPaneLogs);
 
         jTextFieldNonce.setEditable(false);
@@ -401,10 +398,6 @@ public final class SEGUI extends javax.swing.JFrame {
         jTextFieldHash.setEditable(false);
         jTextFieldHash.setText("0");
         jTextFieldHash.setBorder(javax.swing.BorderFactory.createTitledBorder("Hash"));
-
-        jTextAreaMensagem.setColumns(20);
-        jTextAreaMensagem.setRows(5);
-        jScrollPane7.setViewportView(jTextAreaMensagem);
 
         javax.swing.GroupLayout jPanelMinerarLayout = new javax.swing.GroupLayout(jPanelMinerar);
         jPanelMinerar.setLayout(jPanelMinerarLayout);
@@ -424,18 +417,14 @@ public final class SEGUI extends javax.swing.JFrame {
                             .addComponent(jSpinnerZeros)
                             .addComponent(jButtonMinerar, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)))
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelMinerarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelMinerarLayout.createSequentialGroup()
-                        .addGap(0, 56, Short.MAX_VALUE)
-                        .addGroup(jPanelMinerarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelMinerarLayout.createSequentialGroup()
-                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(29, 29, 29))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelMinerarLayout.createSequentialGroup()
-                                .addComponent(jTextFieldNonce, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(45, 45, 45))))
-                    .addComponent(jTextFieldHash)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldHash, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelMinerarLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jTextFieldNonce, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(61, 61, 61))))
         );
         jPanelMinerarLayout.setVerticalGroup(
             jPanelMinerarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -449,16 +438,14 @@ public final class SEGUI extends javax.swing.JFrame {
                     .addComponent(jSpinnerZeros)
                     .addComponent(jTextFieldEnderecoServidor, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
-                .addComponent(jScrollPane6)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanelMinerarLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jTextFieldNonce, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
+                .addGap(44, 44, 44)
                 .addComponent(jTextFieldHash, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(53, 53, 53))
+                .addGap(75, 75, 75))
         );
 
         menuTabs.addTab("Minerar", jPanelMinerar);
@@ -493,22 +480,21 @@ public final class SEGUI extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(43, 43, 43)
+                .addComponent(jButtonAdicionarEleicao)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(194, 194, 194)
                         .addComponent(jLabelAdminCandidatos)
                         .addGap(18, 18, 18)
                         .addComponent(jTextFieldAdminCandidatos, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(jButtonAdicionarEleicao)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                         .addComponent(jLabelAdminElei)
                         .addGap(18, 18, 18)
                         .addComponent(jTextFieldAdminElei, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonAdicionarCandidato)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabelAdminElei1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane8))
@@ -522,18 +508,20 @@ public final class SEGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabelAdminElei)
-                                .addComponent(jTextFieldAdminElei, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jButtonAdicionarEleicao, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelAdminElei)
+                            .addComponent(jTextFieldAdminElei, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelAdminCandidatos)
                             .addComponent(jTextFieldAdminCandidatos, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButtonAdicionarCandidato)))
                     .addComponent(jScrollPane8))
                 .addGap(61, 61, 61))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(65, 65, 65)
+                .addComponent(jButtonAdicionarEleicao, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jButtonMerkleTree.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
@@ -563,7 +551,7 @@ public final class SEGUI extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(75, Short.MAX_VALUE)
+                .addContainerGap(77, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonMerkleTree, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldQuantidadeVotos, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -593,17 +581,7 @@ public final class SEGUI extends javax.swing.JFrame {
 
         menuTabs.addTab("Admin", jPanelAdmin);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(menuTabs)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(menuTabs, javax.swing.GroupLayout.Alignment.TRAILING)
-        );
-
+        getContentPane().add(menuTabs, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
         menuTabs.getAccessibleContext().setAccessibleName("");
 
         pack();
@@ -725,9 +703,208 @@ public final class SEGUI extends javax.swing.JFrame {
             Logger.getLogger(SEGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnRegistarActionPerformed
+    
+    //função do botão para se conectar a um servidor (PROFESSOR)
+    private void jButtonConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConectarActionPerformed
+        try {
+            miner = (InterfaceRemoteMiner) RMI.getRemote(jTextFieldEnderecoServidor.getText());
+            GuiUtils.insertText(jTextPaneLogs, "Connected ", miner.getAdress(), Color.GREEN, Color.MAGENTA);
+        } catch (Exception ex) {
+            onException("Start Remote", ex);
+        }
+    }//GEN-LAST:event_jButtonConectarActionPerformed
+
+    //função do botão para começar a minerar (PROFESSOR)
+    private void jButtonMinerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMinerarActionPerformed
+        /////////////////////verifica se existe uma merkle tree com dados novos
+        if(tree == null){
+            JOptionPane.showMessageDialog(null, "Crie uma Merkle Tree com dados primeiro", "Aviso!",JOptionPane.WARNING_MESSAGE);
+        }else{
+        /////////////////////
+            try {
+                if (miner.isMining()) {
+                    miner.stopMining(9999);
+                    GuiUtils.insertText(jTextPaneLogs, "Stop Mining", miner.getAdress());
+                } else {
+                    new Thread(() -> {
+                        try {
+                            GuiUtils.insertText(jTextPaneLogs, "Start Mining", miner.getAdress(), Color.GREEN, Color.WHITE);
+
+                            SwingUtilities.invokeLater(() -> {
+                                jTextFieldNonce.setText("");
+                                jTextFieldHash.setText("");
+                                jButtonMinerar.setText("Stop");
+                            }); 
+                            int nonce = miner.mine(Arrays.toString(tree.getRoot()), (int) jSpinnerZeros.getValue());
+                            SwingUtilities.invokeLater(() -> {
+                                jTextFieldNonce.setText(nonce + "");
+                                jTextFieldHash.setText(Miner.getHash(Arrays.toString(tree.getRoot()), nonce));
+                                jButtonMinerar.setText("Start");
+                            });
+                        } catch (Exception ex) {
+                            onException("Mining", ex);
+                        }
+                    }).start();
+                }
+                ////////////////////reinicia os dados da merkle tree e o contador de votos
+                tree = null;
+                voteCounter = 0;
+                jTextFieldQuantidadeVotos.setText(voteCounter + "");
+                ////////////////////
+            } catch (Exception ex) {
+                onException("Mining", ex);
+            }
+        }
+    }//GEN-LAST:event_jButtonMinerarActionPerformed
+
+    //Permite validar um voto, esta é guardada em "votosStack"
+    private void jButtonVotarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVotarActionPerformed
+        //verifica se já está uma eleição selecionada
+        if(jListVotacao.isSelectionEmpty()){
+            JOptionPane.showMessageDialog(null, "Selecione um candidato primeiro", "Aviso!",JOptionPane.WARNING_MESSAGE);
+        }else{
+            //verifica em qual dos candidatos é que se votou
+            for(Candidato candidato : eleicaoSelecionada.getListaCandidatos()){
+                if(candidato.getNome().equals(jListVotacao.getSelectedValue())){
+                    //após verificado, cria um novo Voto a faz registo
+                    Voto voto = new Voto(loggedEleitor, candidato, eleicaoSelecionada);
+                    votosStack.add(voto);
+                    loggedEleitor.addVotacao(candidato);
+                    eleicaoSelecionada.addEleitor(loggedEleitor);
+                    voteCounter++;
+                    votacao = false;
+                    jTextFieldQuantidadeVotos.setText(voteCounter + "");
+                    break;
+                }
+            }
+            JOptionPane.showMessageDialog(null, "Votação completa", "Informação",JOptionPane.WARNING_MESSAGE);
+            fechaAbaVotar();
+        }
+    }//GEN-LAST:event_jButtonVotarActionPerformed
+
+    //Valida e cria uma eleição
+    private void jButtonAdicionarEleicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarEleicaoActionPerformed
+        //verifica se o nome da eleição está preenchido
+        if(jTextFieldAdminElei.getText().isBlank()){
+            JOptionPane.showMessageDialog(null, "Falta preencher o nome da eleição", "Aviso!",JOptionPane.WARNING_MESSAGE);
+        }else{
+            //verifica se já estão adicionados candidatos
+            if(jTextAreaAdminCandidatos.getText().isBlank()){
+                JOptionPane.showMessageDialog(null, "Falta adicionar os candidatos", "Aviso!",JOptionPane.WARNING_MESSAGE);
+            }else{
+                //obtém os candidatos criados e mete-os num array
+                String[] listaTextoCandidatos = jTextAreaAdminCandidatos.getText().split("\\s");
+                //verifica se existem candidatos suficientes (mínimo 2)
+                if(jTextAreaAdminCandidatos.getText().strip().length() <= listaTextoCandidatos[0].length()){
+                    JOptionPane.showMessageDialog(null, "Sem candidatos suficientes", "Aviso!",JOptionPane.WARNING_MESSAGE);
+                }else{
+                    //se estiver tudo preenchido, cria uma nova eleição e adiciona-a à plataforma
+                    String nomeElei = jTextFieldAdminElei.getText();
+                    ArrayList<Candidato> listacandidatos = new ArrayList();
+                    for(String candidato: listaTextoCandidatos){
+                        listacandidatos.add(new Candidato(candidato));
+                    }
+                    Eleicao eleicao = new Eleicao(nomeElei, null, null, listacandidatos);
+                    listaEleicoes.add(eleicao);
+                    atualizarListaEleicoes(jListEleicoes, listaEleicoes);
+                    atualizarEleicoesComboBox();
+                    jTextFieldAdminElei.setText(null);
+                    jTextFieldAdminCandidatos.setText(null);
+                    jTextAreaAdminCandidatos.setText(null);
+                    JOptionPane.showMessageDialog(null, "Eleição criada", "Informação",JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        }
+    }//GEN-LAST:event_jButtonAdicionarEleicaoActionPerformed
+
+    //Merkle Tree (dados de um bloco)
+    private void jButtonMerkleTreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMerkleTreeActionPerformed
+        //verifica se existem novos votos
+        if(votosStack.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Falta de dados", "Aviso!",JOptionPane.WARNING_MESSAGE);
+        }else{
+            //se existirem, cria uma nova merkle tree com os dados dos novos votos
+            MerkleTree newTree = new MerkleTree(votosStack);
+            tree = newTree;
+            //de seguida remove os votos acabados de ser registados
+            for(int i = 0; i < votosStack.size(); i++){
+                votosStack.remove(i);
+            }
+            JOptionPane.showMessageDialog(null, "Merkle tree gerada", "Informação",JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_jButtonMerkleTreeActionPerformed
+
+    // Após selecionar uma eleição da lista, cria uma nova tab com todos os candidatos
+    private void jListEleicoesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListEleicoesMouseClicked
+        if(votacao){
+            String[] buttons = { "Fechar votação ativa", "Ok" };
+            int aviso = JOptionPane.showOptionDialog(null, "Já se encontra com uma votação ativa, feche-a ou proceda ao voto", "Aviso!",JOptionPane.WARNING_MESSAGE, 0, null, buttons, buttons[1]);
+            if (aviso == JOptionPane.NO_OPTION) {
+                System.out.println("Não apagar");
+            } else if (aviso == JOptionPane.YES_OPTION) {
+                fechaAbaVotar();
+            } else if (aviso == JOptionPane.CLOSED_OPTION) {
+                System.out.println("Aviso fechado");
+            }
+        }else if(loggedIn){
+            //verifica se o utilizador (eleitor) já votou na eleição em que está a tentar entrar
+            boolean votou = false;
+            for(Candidato candidato: listaEleicoes.get(jListEleicoes.getSelectedIndex()).getListaCandidatos()){
+                for(Candidato candidatoVotado: loggedEleitor.getListaVotacoes()){
+                    if(candidatoVotado.equals(candidato)){
+                        JOptionPane.showMessageDialog(null, "Já votou nesta eleição!", "Aviso!",JOptionPane.WARNING_MESSAGE);
+                        votou = true;
+                        break;
+                    }
+                }
+                if(votou)break;
+            }
+            //se ainda não votou, procede. Se votou, não deixa votar outra vez
+            if(!votou){
+                votacao = true;
+                // Recebe o elemento escolhido na lista
+                JList target = (JList)evt.getSource();
+                int index = target.locationToIndex(evt.getPoint());
+                Object item = target.getModel().getElementAt(index);
+                
+
+                //Coloca o nome da eleição selecionada na label "jTituloVotacao"
+                jTituloVotacao.setText(item.toString());
+
+                for(Eleicao eleicao: listaEleicoes){
+                    if(eleicao.getNome().equals(jListEleicoes.getSelectedValue())){
+                        eleicaoSelecionada = eleicao;
+                        break;
+                    }
+                }
+
+                //Adiciona aba/tab de voto, atualiza a lista de candidatos e traz a interface para a aba voto
+                menuTabs.add(jPanelVotacoes, "Votação", 1);
+                atualizarListaCandidatosVoto(jListVotacao, eleicaoSelecionada.getListaCandidatos());
+                menuTabs.setSelectedIndex(1);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Preencha os seus dados primeiro", "Aviso!",JOptionPane.WARNING_MESSAGE);
+        }
+        }
+
+        //Fecha aba/tab "Votação" e coloca o poco da interface na página inicial
+        public void fechaAbaVotar(){
+            // Fecha a aba 1 que quando esta função é executada corresponde sempre ao index da aba "Votação"
+            menuTabs.remove(1);
+            votacao = false;
+            menuTabs.setSelectedIndex(0);
+    }//GEN-LAST:event_jListEleicoesMouseClicked
+
+    //adiciona candidatos novos à eleição a ser criada
+    private void jButtonAdicionarCandidatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarCandidatoActionPerformed
+        String candidato = jTextFieldAdminCandidatos.getText();
+        jTextAreaAdminCandidatos.append(candidato + "\n");
+        jTextFieldAdminCandidatos.setText(null);
+    }//GEN-LAST:event_jButtonAdicionarCandidatoActionPerformed
 
     //Permite selecionar uma eleição através de um comboBox (comboBoxEleicoes), quando a sua seleção é alterada os dados nas restantes listas também o são para corresponder
-    private void comboBoxEleicoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxEleicoesActionPerformed
+    private void comboBoxEleicoesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboBoxEleicoesMouseReleased
         candidatosTextArea.setText(null);
         votacoesTextArea.setText(null);
         //obter o nome da eleição selecionada
@@ -763,171 +940,8 @@ public final class SEGUI extends javax.swing.JFrame {
                 }
             }
         }
-    }//GEN-LAST:event_comboBoxEleicoesActionPerformed
-
-    //função do botão para se conectar a um servidor (PROFESSOR)
-    private void jButtonConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConectarActionPerformed
-        try {
-            miner = (InterfaceRemoteMiner) RMI.getRemote(jTextFieldEnderecoServidor.getText());
-            GuiUtils.insertText(jTextPaneLogs, "Connected ", miner.getAdress(), Color.GREEN, Color.MAGENTA);
-        } catch (Exception ex) {
-            onException("Start Remote", ex);
-        }
-    }//GEN-LAST:event_jButtonConectarActionPerformed
-
-    //função do botão para começar a minerar (PROFESSOR)
-    private void jButtonMinerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMinerarActionPerformed
-        try {
-            if (miner.isMining()) {
-                miner.stopMining(9999);
-                GuiUtils.insertText(jTextPaneLogs, "Stop Mining", miner.getAdress());
-            } else {
-                new Thread(() -> {
-                    try {
-                        GuiUtils.insertText(jTextPaneLogs, "Start Mining", miner.getAdress(), Color.GREEN, Color.WHITE);
-
-                        SwingUtilities.invokeLater(() -> {
-                            jTextFieldNonce.setText("");
-                            jTextFieldHash.setText("");
-                            jButtonMinerar.setText("Stop");
-                        }); 
-                        int nonce = miner.mine(Arrays.toString(tree.getRoot()), (int) jSpinnerZeros.getValue());
-                        SwingUtilities.invokeLater(() -> {
-                            jTextFieldNonce.setText(nonce + "");
-                            jTextFieldHash.setText(Miner.getHash(Arrays.toString(tree.getRoot()), nonce));
-                            jButtonMinerar.setText("Start");
-                        });
-                    } catch (Exception ex) {
-                        onException("Mining", ex);
-                    }
-                }).start();
-            }
-            ////////////////////
-            voteCounter = 0;
-            jTextFieldQuantidadeVotos.setText(voteCounter + "");
-            ////////////////////
-        } catch (Exception ex) {
-            onException("Mining", ex);
-        }
-    }//GEN-LAST:event_jButtonMinerarActionPerformed
-
-    //Permite validar um voto, esta é guardada em "votosStack"
-    private void jButtonVotarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVotarActionPerformed
-        if(jListVotacao.isSelectionEmpty()){
-            JOptionPane.showMessageDialog(null, "Selecione um candidato primeiro", "Aviso!",JOptionPane.WARNING_MESSAGE);
-        }else{
-            for(Candidato candidato : eleicaoSelecionada.getListaCandidatos()){
-                if(candidato.getNome().equals(jListVotacao.getSelectedValue())){
-                    Voto voto = new Voto(loggedEleitor, candidato, eleicaoSelecionada);
-                    votosStack.add(voto);
-                    loggedEleitor.addVotacao(candidato);
-                    eleicaoSelecionada.addEleitor(loggedEleitor);
-                    voteCounter++;
-                    System.out.println(voteCounter);
-                    jTextFieldQuantidadeVotos.setText(voteCounter + "");
-                    break;
-                }
-            }
-            JOptionPane.showMessageDialog(null, "Votação completa", "Informação",JOptionPane.WARNING_MESSAGE);
-            fechaAbaVotar();
-        }
-    }//GEN-LAST:event_jButtonVotarActionPerformed
-
-    //Valida e cria uma eleição
-    private void jButtonAdicionarEleicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarEleicaoActionPerformed
-        if(jTextFieldAdminElei.getText().isBlank()){
-            JOptionPane.showMessageDialog(null, "Falta preencher o nome da eleição", "Aviso!",JOptionPane.WARNING_MESSAGE);
-        }else{
-            if(jTextAreaAdminCandidatos.getText().isBlank()){
-                JOptionPane.showMessageDialog(null, "Falta adicionar os candidatos", "Aviso!",JOptionPane.WARNING_MESSAGE);
-            }else{
-                String[] listaTextoCandidatos = jTextAreaAdminCandidatos.getText().split("\\s");
-                if(jTextAreaAdminCandidatos.getText().strip().length() <= listaTextoCandidatos[0].length()){
-                    JOptionPane.showMessageDialog(null, "Sem candidatos suficientes", "Aviso!",JOptionPane.WARNING_MESSAGE);
-                }else{
-                    String nomeElei = jTextFieldAdminElei.getText();
-                    ArrayList<Candidato> listacandidatos = new ArrayList();
-                    for(String candidato: listaTextoCandidatos){
-                        listacandidatos.add(new Candidato(candidato));
-                    }
-                    Eleicao eleicao = new Eleicao(nomeElei, null, null, listacandidatos);
-                    listaEleicoes.add(eleicao);
-                    atualizarListaEleicoes(jListEleicoes, listaEleicoes);
-                    atualizarEleicoesComboBox();
-                    jTextFieldAdminElei.setText(null);
-                    jTextFieldAdminCandidatos.setText(null);
-                    jTextAreaAdminCandidatos.setText(null);
-                    JOptionPane.showMessageDialog(null, "Eleição criada", "Informação",JOptionPane.WARNING_MESSAGE);
-                }
-            }
-        }
-    }//GEN-LAST:event_jButtonAdicionarEleicaoActionPerformed
-
-    //Merkle Tree
-    private void jButtonMerkleTreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMerkleTreeActionPerformed
-        MerkleTree newTree = new MerkleTree(votosStack);
-        for(Voto voto : votosStack) {
-            //Imprime na consola a Eleição o Eleitor e o voto que este particou
-            System.out.println("Eleição: " + voto.getEleicao().getNome() + "\nEleitor: " + voto.getEleitor().getNome() + ", Candidato: " + voto.getCandidato().getNome());
-        }
-        tree = newTree;
-    }//GEN-LAST:event_jButtonMerkleTreeActionPerformed
-
-    // Após selecionar uma eleição da lista, cria uma nova tab com todos os candidatos
-    private void jListEleicoesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListEleicoesMouseClicked
-        if(votacao){
-            String[] buttons = { "Fechar votação ativa", "Ok" };
-            int aviso = JOptionPane.showOptionDialog(null, "Já se encontra com uma votação ativa, feche-a ou proceda ao voto", "Aviso!",JOptionPane.WARNING_MESSAGE, 0, null, buttons, buttons[1]);
-            if (aviso == JOptionPane.NO_OPTION) {
-                System.out.println("Não apagar");
-            } else if (aviso == JOptionPane.YES_OPTION) {
-                fechaAbaVotar();
-            } else if (aviso == JOptionPane.CLOSED_OPTION) {
-                System.out.println("Aviso fechado");
-            }
-        }else if(loggedIn){
-            votacao = true;
-            // Recebe o elemento escolhido na lista
-            JList target = (JList)evt.getSource();
-            int index = target.locationToIndex(evt.getPoint());
-            Object item = target.getModel().getElementAt(index);
-
-            //Imprime na consola o item selecionado da listaEleicoes
-            System.out.println(item.toString());
-
-            //Coloca o nome da eleição selecionada na label "jTituloVotacao"
-            jTituloVotacao.setText(item.toString());
-
-            for(Eleicao eleicao: listaEleicoes){
-                if(eleicao.getNome().equals(jListEleicoes.getSelectedValue())){
-                    eleicaoSelecionada = eleicao;
-                    break;
-                }
-            }
-
-            //Adiciona aba/tab de voto, atualiza a lista de candidatos e traz a interface para a aba voto
-            menuTabs.add(jPanelVotacoes, "Votação", 1);
-            atualizarListaCandidatosVoto(jListVotacao, eleicaoSelecionada.getListaCandidatos());
-            menuTabs.setSelectedIndex(1);
-        } else {
-            JOptionPane.showMessageDialog(null, "Preencha os seus dados primeiro", "Aviso!",JOptionPane.WARNING_MESSAGE);
-        }
-        }
-
-        //Fecha aba/tab "Votação" e coloca o poco da interface na página inicial
-        public void fechaAbaVotar(){
-            // Fecha a aba 1 que quando esta função é executada corresponde sempre ao index da aba "Votação"
-            menuTabs.remove(1);
-            votacao = false;
-            menuTabs.setSelectedIndex(0);
-    }//GEN-LAST:event_jListEleicoesMouseClicked
-
-    private void jButtonAdicionarCandidatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarCandidatoActionPerformed
-        String candidato = jTextFieldAdminCandidatos.getText();
-        jTextAreaAdminCandidatos.append(candidato + "\n");
-        jTextFieldAdminCandidatos.setText(null);
-    }//GEN-LAST:event_jButtonAdicionarCandidatoActionPerformed
-
+    }//GEN-LAST:event_comboBoxEleicoesMouseReleased
+    
     public void onException(String title, Exception ex) {
         GuiUtils.insertText(jTextPaneLogs, title, ex.getMessage(), Color.RED, Color.MAGENTA);
     }
@@ -998,11 +1012,9 @@ public final class SEGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JSpinner jSpinnerZeros;
     private javax.swing.JTextArea jTextAreaAdminCandidatos;
-    private javax.swing.JTextArea jTextAreaMensagem;
     private javax.swing.JTextField jTextFieldAdminCandidatos;
     private javax.swing.JTextField jTextFieldAdminElei;
     private javax.swing.JTextField jTextFieldEnderecoServidor;
